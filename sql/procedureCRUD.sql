@@ -12,7 +12,7 @@ DELIMITER $
 
 CREATE PROCEDURE aggiungi_utente( IN EMAIL VARCHAR(100), IN PASSWORD VARCHAR(100) ) 
 	BEGIN
-		INSERT INTO Utente(email,password) value ( EMAIL,PASSWORD);
+		INSERT INTO Utente(email,password) VALUE ( EMAIL,PASSWORD);
 	END $ 
 
 
@@ -67,7 +67,7 @@ CREATE PROCEDURE aggiungi_anagrafica
 )
 
 	BEGIN
-		INSERT INTO Anagrafica value (IDUTENTE,NOME,COGNOME,CF,DATADINASCITA,LUOGODINASCITA,NAZIONE) ;
+		INSERT INTO Anagrafica VALUE (IDUTENTE,NOME,COGNOME,CF,DATADINASCITA,LUOGODINASCITA,NAZIONE) ;
 	END $	
 
 
@@ -129,6 +129,292 @@ CREATE PROCEDURE aggiorna_nazionalita (IN NUOVANAZIONE VARCHAR(100), IN IDUTENTE
         END $
 
 
+#
+#PROCEDURE PUBBLICAZIONE
+#
+
+CREATE PROCEDURE aggiungi_pubblicazione 
+	(
+	IN TITOLO VARCHAR(100) ,
+	IN CATEG  VARCHAR(100) ,
+	IN RIF INT
+	)
+	
+	BEGIN
+		INSERT INTO Pubblicazione VALUE ( TITOLO , CATEG , RIF );
+	END $
 
 
+CREATE PROCEDURE cancella_pubblicazione (IN IDPUBB INT )
+	BEGIN
+		DELETE FROM Pubblicazione WHERE id_pubblicazione = IDPUBB ; 
+	END $
+
+
+CREATE PROCEDURE aggiorna_titolo   (IN IDPUBB INT , IN STRNG VARCHAR(100))
+	BEGIN
+		UPDATE Pubblicazione SET titolo = STRNG WHERE id_pubblicazione = IDPUBB ; 
+	END $
+
+CREATE PROCEDURE aggiorna_categoria(IN IDPUBB INT , IN STRNG VARCHAR(100))
+	BEGIN
+		UPDATE Pubblicazione SET categoria = STRNG WHERE id_pubblicazione = IDPUBB ; 
+	END $
+
+#
+#	PROCEDURE METADATI
+#
+
+CREATE PROCEDURE aggiungi_metadati 
+	(
+		IN IDPUBB 			INT,
+		IN EDI				INT,
+		IN DATAPUBB 		DATE,
+		IN PAROLECHIAVE		VARCHAR(200),
+		IN ISBN				INT(13),
+		IN NUMPAGINE		INT,
+		IN LINGUA			VARCHAR(50),
+		IN SINOSSI			VARCHAR(1000)
+	)
+
+	BEGIN
+		INSERT INTO Metadati VALUE (IDPUBB, EDI ,DATAPUBB ,PAROLECHIAVE ,ISBN ,NUMPAGINE ,LINGUA ,SINOSSI);
+	END $
+
+CREATE PROCEDURE cancella_metadati ( IN ISBN INT(13) )
+	BEGIN
+		DELETE FROM Metadati WHERE isbn = ISBN ;
+	END $
+
+
+CREATE PROCEDURE aggiorna_edizione_metadati (IN EDI INT , IN ISBN INT(13) )
+	BEGIN
+		UPDATE Metadati SET edizione = EDI WHERE isbn = ISBN ; 
+	END $
+
+CREATE PROCEDURE aggiorna_data_pubblicazione_metadati (IN DATAPUBB DATE , IN ISBN INT(13) )
+	BEGIN
+		UPDATE Metadati SET data_pubblicazione = DATAPUBB WHERE isbn = ISBN ; 
+	END $
+
+CREATE PROCEDURE aggiorna_parole_chiave_metadati (IN PAROLECHIAVE VARCHAR(200) , IN ISBN INT(13) )
+	BEGIN
+		UPDATE Metadati SET parole_chiave = PAROLECHIAVE WHERE isbn = ISBN ; 
+	END $
+
+CREATE PROCEDURE aggiorna_isbn_metadati (IN ISBNNEW INT(13), IN ISBN INT(13) )
+	BEGIN
+		UPDATE Metadati SET isbn = ISBNNEW WHERE isbn = ISBN ; 
+	END $
+
+CREATE PROCEDURE aggiorna_num_pagine_metadati (IN NUMPAGINE INT,IN ISBN INT(13) )
+	BEGIN
+		UPDATE Metadati SET num_pagine = NUMPAGINE WHERE isbn = ISBN ; 
+	END $
+
+CREATE PROCEDURE aggiorna_lingua_metadati (IN LINGUA VARCHAR(50),IN ISBN INT(13) )
+	BEGIN
+		UPDATE Metadati SET lingua = LINGUA WHERE isbn = ISBN ; 
+	END $
+
+CREATE PROCEDURE aggiorna_sinossi_metadati (IN SINOSSI VARCHAR(1000) , IN ISBN INT(13) )
+	BEGIN
+		UPDATE Metadati SET sinossi = SINOSSI WHERE isbn = ISBN ; 
+	END $
+
+
+
+#
+#PROCEDURE AUTORE
+#
+
+
+
+CREATE PROCEDURE aggiungi_autore  ( IN NOME VARCHAR(100) , IN COGNOME VARCHAR(100) )
+	BEGIN
+		INSERT INTO Autore VALUE ( NOME , COGNOME );
+	END $
+
+CREATE PROCEDURE cancella_autore ( IN IDAUT INT)
+	BEGIN
+		DELETE FROM Autore WHERE id_autore = IDAUT ;
+	END $
+
+CREATE PROCEDURE  aggiorna_nome_autore( IN NOME VARCHAR(100), IN IDAUT INT)
+	BEGIN
+		UPDATE Autore SET nome =NOME WHERE id_autore = IDAUT ;
+	END $
+
+CREATE PROCEDURE  aggiorna_cognome_autore( IN COGNOME VARCHAR(100), IN IDAUT INT)
+	BEGIN
+		UPDATE Autore SET cognome =COGNOME WHERE id_autore = IDAUT ;
+	END $
+
+
+
+#
+# PROCEDURE CAPITOLO
+#
+CREATE PROCEDURE aggiungi_capitolo
+	(
+		IDPUBB			INT,
+		TITOLO  		VARCHAR(100) ,
+		DESCRIZIONE		VARCHAR(500) ,
+		NUMCAP			INT
+	)
+	BEGIN
+		INSERT INTO Capitolo VALUE (IDPUBB , TITOLO, DESCRIZIONE , NUMCAP);
+	END $
+
+CREATE PROCEDURE cancella_capitolo ( IN IDCAP INT )
+	BEGIN
+		DELETE FROM Capitolo WHERE id_capitolo = IDCAP ;
+	END $
+
+CREATE PROCEDURE  aggiorna_titolo_capitolo( IN TITOLO VARCHAR(100), IN IDCAP INT)
+	BEGIN
+		UPDATE Capitolo SET titolo = TITOLO WHERE id_capitolo = IDAUT ;
+	END $
+
+CREATE PROCEDURE  aggiorna_descrizione_capitolo( IN DESCRIZIONE VARCHAR(500), IN IDCAP INT)
+	BEGIN
+		UPDATE Capitolo SET descrizione = DESCRIZIONE WHERE id_capitolo = IDAUT ;
+	END $
+
+CREATE PROCEDURE  aggiorna_num_capitolo( IN NUMCAP INT, IN IDCAP INT)
+	BEGIN
+		UPDATE Capitolo SET num_capitolo = NUMCAP WHERE id_capitolo = IDAUT ;
+	END $
+
+
+
+
+#
+#PROCEDURE VERSIONE_STAMPA
+#
+
+CREATE PROCEDURE aggiungi_versione_stampa
+	(	
+		IDPUBB 		INT ,
+		NUMCOP 		INT ,
+		DATASTAMP	DATE
+	)
+	BEGIN
+		INSERT INTO Versione_Stampa VALUE (IDPUBB,NUMCOP ,DATASTAMP);
+	END $
+
+CREATE PROCEDURE  aggiorna_num_copie_versione_stampa( IN NUMCOP INT, IN IDVER INT)
+	BEGIN
+		UPDATE Versione_Stampa SET num_copie = NUMCOP WHERE id_capitolo = IDVER ;
+	END $
+
+CREATE PROCEDURE  aggiorna_data_versione_stampa ( IN DATAVER DATE, IN IDVER INT )
+	BEGIN
+		UPDATE Versione_Stampa SET data_stampa = DATAVER WHERE id_capitolo = IDVER ;
+	END $
+
+
+CREATE PROCEDURE cancella_versione_stampa (IN IDVER INT )
+	BEGIN
+		DELETE FROM Versione_Stampa WHERE id_versione = IDVER ;
+	END $
+#
+#PROCEDURE MEDIATYPE
+#
+
+CREATE PROCEDURE aggiungi_mediatype 
+	(
+		IN TIPO			VARCHAR(200) ,
+		IN FORMATO		VARCHAR(200)	
+	)
+	BEGIN
+		INSERT INTO Mediatype VALUE ( TIPO , FORMATO ) ;
+	END $
+
+
+CREATE PROCEDURE aggiorna_tipo_mediatype (IN TIPO VARCHAR(100) , IN IDVER INT )
+	BEGIN
+		UPDATE Mediatype SET tipo = TIPO WHERE id_mediatype = IDVER ;
+	END $
+
+
+CREATE PROCEDURE aggiorna_formato_mediatype (IN FORMATO VARCHAR(100) , IN IDVER INT )
+	BEGIN
+		UPDATE Mediatype SET formato = FORMATO WHERE id_mediatype = IDVER ;
+	END $
+
+
+
+#
+# PROCEDURE RISORSE
+#
+
+CREATE PROCEDURE aggiungi_risorse 
+	(	
+		IN IDMEDIA INT ,
+		IN URI	VARCHAR(200),
+		IN DESCR VARCHAR(500)
+	)
+BEGIN
+	INSERT INTO Risorse VALUE (IDMEDIA , URI , DESCR);
+END $
+
+CREATE PROCEDURE aggiorna_uri_risorse (IN URI VARCHAR(100) , IN IDRISORSA INT )
+	BEGIN
+		UPDATE Risorse SET uri = URI WHERE id_risorsa = IDRISORSA ;	
+	END $
+
+CREATE PROCEDURE aggiorna_formato_risorse (IN DESCRIZ VARCHAR(100) , IN IDRISORSA INT )
+	BEGIN
+		UPDATE Risorse SET descrizione = DESCRIZ WHERE id_risorsa = IDRISORSA ;	
+	END $
+
+
+
+#
+# PROEDURE RECENSIONE
+#
+
+
+CREATE PROCEDURE aggiungi_recensione 
+	(
+		IN IDUTENTE INT ,
+		IDPUBB 	INT,
+		IN TESTO VARCHAR(1000)	
+	)
+	BEGIN
+		INSERT INTO Recensione VALUE (IDUTENTE , IDPUBB , TESTO);
+	END $
+
+CREATE PROCEDURE cancella_recensione (IN IDUTENTE INT , IN IDPUBB INT)
+	BEGIN
+		DELETE FROM Recensione WHERE id_utente = IDUTENTE AND id_pubblicazione = IDPUBB ;
+	END $
+
+CREATE PROCEDURE aggiorna_stato_recensione ( IN IDUTENTE INT , IN IDPUBB INT )
+	BEGIN
+		UPDATE Recensione SET stato = 'APPROVATA' WHERE id_utente = IDUTENTE AND id_pubblicazione = IDPUBB ;
+	END $
+
+CREATE PROCEDURE aggiorna_testo_recensione (IN IDUTENTE INT , IN IDPUBB INT , IN TESTO VARCHAR(1000) )
+	BEGIN
+		UPDATE Recensione SET testo = TESTO AND stato = 'IN ATTESA' AND data = CURRENT_TIMESTAMP WHERE id_utente = IDUTENTE AND id_pubblicazione = IDPUBB ;
+	END $
+
+#
+# PROCEDURE GRADIMENTO
+#
+
+	id_utente				INT NOT NULL,
+	id_pubblicazione 		INT NOT NULL,
+
+CREATE PROCEDURE aggiungi_gradimento ( IN IDUTENTE INT , IN IDPUBB INT )
+	BEGIN
+		INSERT INTO Gradimento VALUE (IDUTENTE , IDPUBB );
+	END $
+
+CREATE PROCEDURE cancella_gradimento (IN IDUTENTE INT , IN IDPUBB INT )
+	BEGIN
+		DELETE FROM Gradimento WHERE id_utente = IDUTENTE AND id_pubblicazione = IDPUBB ;
+	END $
 
