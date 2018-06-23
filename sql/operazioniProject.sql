@@ -1,10 +1,46 @@
+DELIMITER $
+
 # OPERAZIONE 1. Modifica del livello di un utente (da attivo a passivo e viceversa).
+DROP PROCEDURE IF EXISTS aggiorna_tipo_utente ; 
+CREATE PROCEDURE aggiorna_tipo_utente (IN EMAIL1 VARCHAR(100) )
+	BEGIN
+		DECLARE varq VARCHAR(10) ;
+		SET varq = ( SELECT tipo FROM Utente WHERE email = EMAIL1 ) ;
+		IF  strcmp( varq , 'ATTIVO') = 1
+		THEN
+			select varq ;
+			call aggiorna_tipo_attivo(EMAIL1);
+		ELSE
+			call aggiorna_tipo_passivo(EMAIL1);
+		END IF;
+		
+	END $
 
 # OPERAZIONE 2. Estrazione elenco delle ultime dieci pubblicazioni inserite.
 
+DROP PROCEDURE IF EXISTS seleziona_ultime_dieci_pubblicazioni_inserite ; 
+CREATE PROCEDURE seleziona_ultime_dieci_pubblicazioni_inserite( )
+	BEGIN
+		select * from Pubblicazione order by data_inserimento DESC LIMIT 10 ;
+	END $
+
+
+
 # OPERAZIONE 3. Estrazione elenco delle pubblicazioni aggiornate di recente (ultimi 30 giorni)
+DROP PROCEDURE IF EXISTS seleziona_pubblicazioni_ultima_mod_30giorni ; 
+CREATE PROCEDURE seleziona_pubblicazioni_ultima_mod_30giorni( )
+	BEGIN
+		select * from Pubblicazione where data_ultima_modifica between ( CURRENT_TIMESTAMP - INTERVAL 30 DAY)  AND CURRENT_TIMESTAMP ; 
+	END $
+
+
 
 # OPERAZIONE 4. Estrazione elenco degli utenti più “collaborativi” (cioè quelli che hanno inserito più pubblicazioni).
+DROP PROCEDURE IF EXISTS seleziona_utenti_piu_collaborativi ; 
+CREATE PROCEDURE seleziona_utenti_piu_collaborativi( IN numutenti INT )
+	BEGIN
+		select * from Utente ORDER BY num_inserimenti DESC LIMIT numutenti ;
+	END $
 
 # OPERAZIONE 5. Estrazione elenco delle pubblicazioni inserite da un utente.
 
