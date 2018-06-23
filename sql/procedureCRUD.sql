@@ -161,6 +161,8 @@ CREATE PROCEDURE aggiorna_categoria(IN IDPUBB INT , IN STRNG VARCHAR(100))
 		UPDATE Pubblicazione SET categoria = STRNG WHERE id_pubblicazione = IDPUBB ; 
 	END $
 
+
+
 #
 #	PROCEDURE METADATI
 #
@@ -301,12 +303,12 @@ CREATE PROCEDURE  aggiorna_num_capitolo( IN NUMCAP INT, IN IDCAP INT)
 
 CREATE PROCEDURE aggiungi_versione_stampa
 	(	
-		IDPUBB 		BIGINT ,
+		CODICEISBN 		BIGINT ,
 		NUMCOP 		INT ,
 		DATASTAMP	DATE
 	)
 	BEGIN
-		INSERT INTO Versione_Stampa ( isbn ,num_copie ,data_stampa ) VALUE (IDPUBB,NUMCOP ,DATASTAMP);
+		INSERT INTO Versione_Stampa ( isbn ,num_copie ,data_stampa ) VALUE (CODICEISBN,NUMCOP ,DATASTAMP);
 	END $
 
 CREATE PROCEDURE  aggiorna_num_copie_versione_stampa( IN NUMCOP INT, IN IDVER INT)
