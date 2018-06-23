@@ -6,376 +6,375 @@ delete from mysql.proc where db = 'BIBLIOTECA';
 DELIMITER $
 
 #
-#	PROCEDURE INSERIMENTO , CANC , E AGGIORNAMENTO TABELLA UTENTE
+#	procedure INSERIMENTO , CANC , E AGGIORNAMENTO TABELLA UTENTE
 #
 
 
-CREATE PROCEDURE aggiungi_utente( IN EMAILUTENTE VARCHAR(100), IN PASSWD VARCHAR(100) ) 
-	BEGIN
-		INSERT INTO Utente(email,password) VALUE ( EMAILUTENTE,PASSWORD(PASSWD) );
-	END $ 
+create procedure aggiungi_utente( in EMAILUTENTE varchar(100), in PASSWD varchar(100) ) 
+	begin
+		insert into Utente(email,password) value ( EMAILUTENTE,PASSWORD(PASSWD) );
+	end $ 
 
 
-CREATE PROCEDURE cancella_utente(IN EMAILUTENTE VARCHAR(100) )
-	BEGIN
-		DELETE FROM Utente where email = EMAILUTENTE ;
-	END $
+create procedure cancella_utente(in EMAILUTENTE varchar(100) )
+	begin
+		delete from Utente where email = EMAILUTENTE ;
+	end $
 
 
-CREATE PROCEDURE aggiorna_email (IN EMAILVECCHIA VARCHAR(100) , IN EMAILNUOVA VARCHAR(100) )
-	BEGIN
-		UPDATE Utente SET email = EMAILNUOVA WHERE email = EMAILVECCHIA ;
-	END $
+create procedure aggiorna_email (in EMAILVECCHIA varchar(100) , in EMAILNUOVA varchar(100) )
+	begin
+		update Utente set email = EMAILNUOVA where email = EMAILVECCHIA ;
+	end $
 
-CREATE PROCEDURE aggiorna_password(IN PASSWORD VARCHAR(100) , IN EMAILUTENTE VARCHAR(100) )
-	BEGIN
-		UPDATE Utente SET password = PASSWORD WHERE email = EMAILUTENTE ;
-	END $
+create procedure aggiorna_password(in PASSWORD varchar(100) , in EMAILUTENTE varchar(100) )
+	begin
+		update Utente set password = PASSWORD where email = EMAILUTENTE ;
+	end $
 
-CREATE PROCEDURE aggiorna_tipo_attivo( IN EMAILUTENTE VARCHAR(100) )
-	BEGIN 
-		UPDATE Utente SET tipo = 'ATTIVO' WHERE email = EMAILUTENTE ;
-	END $
+create procedure aggiorna_tipo_attivo( in EMAILUTENTE varchar(100) )
+	begin 
+		update Utente set tipo = 'ATTIVO' where email = EMAILUTENTE ;
+	end $
 
-CREATE PROCEDURE aggiorna_tipo_passivo( IN EMAILUTENTE VARCHAR(100) )
-	BEGIN 
-		UPDATE Utente SET tipo = 'PASSIVO' WHERE email = EMAILUTENTE ;
-	END $
+create procedure aggiorna_tipo_passivo( in EMAILUTENTE varchar(100) )
+	begin 
+		update Utente set tipo = 'PASSIVO' where email = EMAILUTENTE ;
+	end $
 
 
-CREATE PROCEDURE aggiorna_tipo( IN EMAILUTENTE VARCHAR(100) , IN TIPO VARCHAR(10) )
-	BEGIN 
-		UPDATE Utente SET tipo = TIPO WHERE email = EMAILUTENTE ;
-	END $
+create procedure aggiorna_tipo( in EMAILUTENTE varchar(100) , in TIPO varchar(10) )
+	begin 
+		update Utente set tipo = TIPO where email = EMAILUTENTE ;
+	end $
 
 
 
 #
-#	PROCEDURE CRUD ANAGRAFICA
+#	procedure CRUD ANAGRAFICA
 #
 
-CREATE PROCEDURE aggiungi_anagrafica 
+create procedure aggiungi_anagrafica 
 
 (
-	IN IDUTENTE INT,
-	IN NOME  VARCHAR(100),
-	IN COGNOME VARCHAR(100),
-	IN CF VARCHAR(100),
-	IN DATADINASCITA DATE,
-	IN LUOGODINASCITA VARCHAR(100),
-	IN NAZIONE VARCHAR(100)
+	in IDUTENTE int,
+	in NOME  varchar(100),
+	in COGNOME varchar(100),
+	in CF varchar(100),
+	in DATADINASCITA DATE,
+	in LUOGODINASCITA varchar(100),
+	in NAZIONE varchar(100)
 )
 
-	BEGIN
-		INSERT INTO Anagrafica VALUE (IDUTENTE,NOME,COGNOME,CF,DATADINASCITA,LUOGODINASCITA,NAZIONE) ;
-	END $	
+	begin
+		insert into Anagrafica value (IDUTENTE,NOME,COGNOME,CF,DATADINASCITA,LUOGODINASCITA,NAZIONE) ;
+	end $	
 
 
 
 
 
-CREATE PROCEDURE cancella_anagrafica ( IN IDUTENTE INT )
-	BEGIN
-	DELETE FROM Anagrafica WHERE id_utente = IDUTENTE ;
-	END $
+create procedure cancella_anagrafica ( in IDUTENTE int )
+	begin
+	delete from Anagrafica where id_utente = IDUTENTE ;
+	end $
 
 
-#PROCEDURE PER AGGIORNAMENTO
+#procedure PER AGGIORNAMENTO
 
-#UPDATE NOME
+#update NOME
 
-CREATE PROCEDURE aggiorna_nome (IN NUOVONOME VARCHAR(100) , IN IDUTENTE INT )
-	BEGIN
-	UPDATE Anagrafica SET nome= NUOVONOME WHERE id_utente = IDUTENTE ;
-	END $
-
-
-#UPDATE COGNOME
-
-CREATE PROCEDURE aggiorna_cognome(IN NUOVOCOGNOME VARCHAR(100), IN IDUTENTE INT)
-	BEGIN
-        UPDATE Anagrafica SET cognome= NUOVOCOGNOME WHERE id_utente = IDUTENTE ;
-        END $
+create procedure aggiorna_nome (in NUOVONOME varchar(100) , in IDUTENTE int )
+	begin
+	update Anagrafica set nome= NUOVONOME where id_utente = IDUTENTE ;
+	end $
 
 
-#UPDATE CODICE FISCALE
+#update COGNOME
 
-CREATE PROCEDURE aggiorna_cf ( IN NUOVOCF VARCHAR(100) , IN IDUTENTE INT )
-        BEGIN
-        UPDATE Anagrafica SET cf = NUOVOCF WHERE id_utente = IDUTENTE ;
-        END $
-
-
-#UPDATE DATA DI NASCITA
-
-CREATE PROCEDURE aggiorna_data_nascita (IN NUOVADATA Date, IN IDUTENTE INT )
-        BEGIN
-        UPDATE Anagrafica SET data_nascita= NUOVADATA WHERE id_utente = IDUTENTE ;
-        END $
+create procedure aggiorna_cognome(in NUOVOCOGNOME varchar(100), in IDUTENTE int)
+	begin
+        update Anagrafica set cognome= NUOVOCOGNOME where id_utente = IDUTENTE ;
+        end $
 
 
-#UPDATE LUOGO DI NASCITA
+#update CODICE FISCALE
 
-CREATE PROCEDURE aggiorna_luogo_nascita(IN NUOVOLUOGO VARCHAR(100), IN IDUTENTE INT)
-        BEGIN
-        UPDATE Anagrafica SET luogo_nascita = NUOVOLUOGO WHERE id_utente = IDUTENTE;
-        END $
+create procedure aggiorna_cf ( in NUOVOCF varchar(100) , in IDUTENTE int )
+        begin
+        update Anagrafica set cf = NUOVOCF where id_utente = IDUTENTE ;
+        end $
 
 
-#UPDATE NAZIONE
-CREATE PROCEDURE aggiorna_nazionalita (IN NUOVANAZIONE VARCHAR(100), IN IDUTENTE INT)
-        BEGIN
-        UPDATE Anagrafica SET nazionalita = NUOVANAZIONE WHERE id_utente = IDUTENTE ;
-        END $
+#update DATA DI NASCITA
+
+create procedure aggiorna_data_nascita (in NUOVADATA Date, in IDUTENTE int )
+        begin
+        update Anagrafica set data_nascita= NUOVADATA where id_utente = IDUTENTE ;
+        end $
+
+
+#update LUOGO DI NASCITA
+
+create procedure aggiorna_luogo_nascita(in NUOVOLUOGO varchar(100), in IDUTENTE int)
+        begin
+        update Anagrafica set luogo_nascita = NUOVOLUOGO where id_utente = IDUTENTE;
+        end $
+
+
+#update NAZIONE
+create procedure aggiorna_nazionalita (in NUOVANAZIONE varchar(100), in IDUTENTE int)
+        begin
+        update Anagrafica set nazionalita = NUOVANAZIONE where id_utente = IDUTENTE ;
+        end $
 
 
 #
-#PROCEDURE PUBBLICAZIONE
+#procedure PUBBLICAZIONE
 #
 
-CREATE PROCEDURE aggiungi_pubblicazione 
+create procedure aggiungi_pubblicazione 
 	(
-	IN TITOLO VARCHAR(100) ,
-	IN CATEG  VARCHAR(100) ,
-	IN RIF 	  VARCHAR(100)
+	in TITOLO varchar(100) ,
+	in CATEG  varchar(100) ,
+	in RIF 	  varchar(100)
 	)
 	
-	BEGIN
-		INSERT INTO Pubblicazione (titolo, categoria , rif_inserimento )VALUE ( TITOLO , CATEG , RIF );
-	END $
+	begin
+		insert into Pubblicazione (titolo, categoria , rif_inserimento ) value ( TITOLO , CATEG , RIF );
+	end $
 
 
-CREATE PROCEDURE cancella_pubblicazione (IN IDPUBB INT )
-	BEGIN
-		DELETE FROM Pubblicazione WHERE id_pubblicazione = IDPUBB ; 
-	END $
+create procedure cancella_pubblicazione (in IDPUBB int )
+	begin
+		delete from Pubblicazione where id_pubblicazione = IDPUBB ; 
+	end $
 
 
-CREATE PROCEDURE aggiorna_titolo   (IN IDPUBB INT , IN STRNG VARCHAR(100))
-	BEGIN
-		UPDATE Pubblicazione SET titolo = STRNG WHERE id_pubblicazione = IDPUBB ; 
-	END $
+create procedure aggiorna_titolo   (in IDPUBB int , in STRNG varchar(100))
+	begin
+		update Pubblicazione set titolo = STRNG where id_pubblicazione = IDPUBB ; 
+	end $
 
-CREATE PROCEDURE aggiorna_categoria(IN IDPUBB INT , IN STRNG VARCHAR(100))
-	BEGIN
-		UPDATE Pubblicazione SET categoria = STRNG WHERE id_pubblicazione = IDPUBB ; 
-	END $
+create procedure aggiorna_categoria(in IDPUBB int , in STRNG varchar(100))
+	begin
+		update Pubblicazione set categoria = STRNG where id_pubblicazione = IDPUBB ; 
+	end $
 
 
 
 #
-#	PROCEDURE METADATI
+#	procedure METADATI
 #
 
-CREATE PROCEDURE aggiungi_metadati 
+create procedure aggiungi_metadati 
 	(
-		IN IDPUBB 			INT,
-		IN EDIZIONE			INT,
-		IN EDITORE			VARCHAR(50),
-		IN DATAPUBB 		DATE,
-		IN PAROLECHIAVE		VARCHAR(200),
-		IN ISBN				BIGINT,
-		IN NUMPAGINE		INT,
-		IN LINGUA			VARCHAR(50),
-		IN SINOSSI			VARCHAR(1000)
+		in IDPUBB 			int,
+		in EDIZIONE			int,
+		in EDITORE			varchar(50),
+		in DATAPUBB 		DATE,
+		in PAROLECHIAVE		varchar(200),
+		in ISBN				BIGINT,
+		in NUMPAGINE		int,
+		in LINGUA			varchar(50),
+		in SINOSSI			varchar(1000)
 	)
 
-	BEGIN
-		INSERT INTO Metadati VALUE (IDPUBB, EDIZIONE ,EDITORE,DATAPUBB ,PAROLECHIAVE ,ISBN ,NUMPAGINE ,LINGUA ,SINOSSI);
-	END $
+	begin
+		insert into Metadati value (IDPUBB, EDIZIONE ,EDITORE,DATAPUBB ,PAROLECHIAVE ,ISBN ,NUMPAGINE ,LINGUA ,SINOSSI);
+	end $
 
-CREATE PROCEDURE cancella_metadati ( IN ISBN BIGINT )
-	BEGIN
-		DELETE FROM Metadati WHERE isbn = ISBN ;
-	END $
-
-
-CREATE PROCEDURE aggiorna_edizione_metadati (IN EDI INT , IN ISBN BIGINT )
-	BEGIN
-		UPDATE Metadati SET edizione = EDI WHERE isbn = ISBN ; 
-	END $
-
-CREATE PROCEDURE aggiorna_editore_metadati (IN EDI INT , IN ISBN BIGINT )
-	BEGIN
-		UPDATE Metadati SET editore = EDI WHERE isbn = ISBN ; 
-	END $
-
-CREATE PROCEDURE aggiorna_data_pubblicazione_metadati (IN DATAPUBB DATE , IN ISBN BIGINT )
-	BEGIN
-		UPDATE Metadati SET data_pubblicazione = DATAPUBB WHERE isbn = ISBN ; 
-	END $
-
-CREATE PROCEDURE aggiorna_parole_chiave_metadati (IN PAROLECHIAVE VARCHAR(200) , IN ISBN BIGINT )
-	BEGIN
-		UPDATE Metadati SET parole_chiave = PAROLECHIAVE WHERE isbn = ISBN ; 
-	END $
-
-CREATE PROCEDURE aggiorna_isbn_metadati (IN ISBNNEW INT(13), IN ISBN BIGINT )
-	BEGIN
-		UPDATE Metadati SET isbn = ISBNNEW WHERE isbn = ISBN ; 
-	END $
-
-CREATE PROCEDURE aggiorna_num_pagine_metadati (IN NUMPAGINE INT,IN ISBN BIGINT )
-	BEGIN
-		UPDATE Metadati SET num_pagine = NUMPAGINE WHERE isbn = ISBN ; 
-	END $
-
-CREATE PROCEDURE aggiorna_lingua_metadati (IN LINGUA VARCHAR(50),IN ISBN BIGINT )
-	BEGIN
-		UPDATE Metadati SET lingua = LINGUA WHERE isbn = ISBN ; 
-	END $
-
-CREATE PROCEDURE aggiorna_sinossi_metadati (IN SINOSSI VARCHAR(1000) , IN ISBN BIGINT )
-	BEGIN
-		UPDATE Metadati SET sinossi = SINOSSI WHERE isbn = ISBN ; 
-	END $
+create procedure cancella_metadati ( in ISBN BIGINT )
+	begin
+		delete from Metadati where isbn = ISBN ;
+	end $
 
 
+create procedure aggiorna_edizione_metadati (in EDI int , in ISBN BIGINT )
+	begin
+		update Metadati set edizione = EDI where isbn = ISBN ; 
+	end $
 
-#
-#PROCEDURE AUTORE
-#
+create procedure aggiorna_editore_metadati (in EDI int , in ISBN BIGINT )
+	begin
+		update Metadati set editore = EDI where isbn = ISBN ; 
+	end $
 
+create procedure aggiorna_data_pubblicazione_metadati (in DATAPUBB DATE , in ISBN BIGINT )
+	begin
+		update Metadati set data_pubblicazione = DATAPUBB where isbn = ISBN ; 
+	end $
 
+create procedure aggiorna_parole_chiave_metadati (in PAROLECHIAVE varchar(200) , in ISBN BIGINT )
+	begin
+		update Metadati set parole_chiave = PAROLECHIAVE where isbn = ISBN ; 
+	end $
 
-CREATE PROCEDURE aggiungi_autore  ( IN NOME VARCHAR(100) , IN COGNOME VARCHAR(100) )
-	BEGIN
-		INSERT INTO Autore ( nome , cognome ) VALUE ( NOME , COGNOME );
-	END $
+create procedure aggiorna_isbn_metadati (in ISBNNEW int(13), in ISBN BIGINT )
+	begin
+		update Metadati set isbn = ISBNNEW where isbn = ISBN ; 
+	end $
 
-CREATE PROCEDURE cancella_autore ( IN IDAUT INT)
-	BEGIN
-		DELETE FROM Autore WHERE id_autore = IDAUT ;
-	END $
+create procedure aggiorna_num_pagine_metadati (in NUMPAGINE int,in ISBN BIGINT )
+	begin
+		update Metadati set num_pagine = NUMPAGINE where isbn = ISBN ; 
+	end $
 
-CREATE PROCEDURE  aggiorna_nome_autore( IN NOME VARCHAR(100), IN IDAUT INT)
-	BEGIN
-		UPDATE Autore SET nome =NOME WHERE id_autore = IDAUT ;
-	END $
+create procedure aggiorna_lingua_metadati (in LINGUA varchar(50),in ISBN BIGINT )
+	begin
+		update Metadati set lingua = LINGUA where isbn = ISBN ; 
+	end $
 
-CREATE PROCEDURE  aggiorna_cognome_autore( IN COGNOME VARCHAR(100), IN IDAUT INT)
-	BEGIN
-		UPDATE Autore SET cognome =COGNOME WHERE id_autore = IDAUT ;
-	END $
+create procedure aggiorna_sinossi_metadati (in SINOSSI varchar(1000) , in ISBN BIGINT )
+	begin
+		update Metadati set sinossi = SINOSSI where isbn = ISBN ; 
+	end $
 
 
 
 #
-# PROCEDURE CAPITOLO
+#procedure AUTORE
 #
-CREATE PROCEDURE aggiungi_capitolo
+
+
+
+create procedure aggiungi_autore  ( in NOME varchar(100) , in COGNOME varchar(100) )
+	begin
+		insert into Autore ( nome , cognome ) value ( NOME , COGNOME );
+	end $
+
+create procedure cancella_autore ( in IDAUT int)
+	begin
+		delete from Autore where id_autore = IDAUT ;
+	end $
+
+create procedure  aggiorna_nome_autore( in NOME varchar(100), in IDAUT int)
+	begin
+		update Autore set nome =NOME where id_autore = IDAUT ;
+	end $
+
+create procedure  aggiorna_cognome_autore( in COGNOME varchar(100), in IDAUT int)
+	begin
+		update Autore set cognome =COGNOME where id_autore = IDAUT ;
+	end $
+
+
+
+#
+# procedure CAPITOLO
+#
+create procedure aggiungi_capitolo
 	(
-		IDPUBB			INT,
-		TITOLO  		VARCHAR(100) ,
-		DESCRIZIONE		VARCHAR(500) ,
-		NUMCAP			INT
+		IDPUBB			int,
+		TITOLO  		varchar(100) ,
+		DESCRIZIONE		varchar(500) ,
+		NUMCAP			int
 	)
-	BEGIN
-		INSERT INTO Capitolo (id_pubblicazione , titolo , descrizione , num_capitolo)  VALUE (IDPUBB , TITOLO, DESCRIZIONE , NUMCAP);
-	END $
+	begin
+		insert into Capitolo (id_pubblicazione , titolo , descrizione , num_capitolo)  value (IDPUBB , TITOLO, DESCRIZIONE , NUMCAP);
+	end $
 
-CREATE PROCEDURE cancella_capitolo ( IN IDCAP INT )
-	BEGIN
-		DELETE FROM Capitolo WHERE id_capitolo = IDCAP ;
-	END $
+create procedure cancella_capitolo ( in IDCAP int )
+	begin
+		delete from Capitolo where id_capitolo = IDCAP ;
+	end $
 
-CREATE PROCEDURE  aggiorna_titolo_capitolo( IN TITOLO VARCHAR(100), IN IDCAP INT)
-	BEGIN
-		UPDATE Capitolo SET titolo = TITOLO WHERE id_capitolo = IDAUT ;
-	END $
+create procedure  aggiorna_titolo_capitolo( in TITOLO varchar(100), in IDCAP int)
+	begin
+		update Capitolo set titolo = TITOLO where id_capitolo = IDAUT ;
+	end $
 
-CREATE PROCEDURE  aggiorna_descrizione_capitolo( IN DESCRIZIONE VARCHAR(500), IN IDCAP INT)
-	BEGIN
-		UPDATE Capitolo SET descrizione = DESCRIZIONE WHERE id_capitolo = IDAUT ;
-	END $
+create procedure  aggiorna_descrizione_capitolo( in DESCRIZIONE varchar(500), in IDCAP int)
+	begin
+		update Capitolo set descrizione = DESCRIZIONE where id_capitolo = IDAUT ;
+	end $
 
-CREATE PROCEDURE  aggiorna_num_capitolo( IN NUMCAP INT, IN IDCAP INT)
-	BEGIN
-		UPDATE Capitolo SET num_capitolo = NUMCAP WHERE id_capitolo = IDAUT ;
-	END $
-
+create procedure  aggiorna_num_capitolo( in NUMCAP int, in IDCAP int)
+	begin
+		update Capitolo set num_capitolo = NUMCAP where id_capitolo = IDAUT ;
+	end $
 
 
 
 #
-#PROCEDURE VERSIONE_STAMPA
+#procedure VERSIONE_STAMPA
 #
 
-CREATE PROCEDURE aggiungi_versione_stampa
+create procedure aggiungi_versione_stampa
 	(	
 		CODICEISBN 		BIGINT ,
-		NUMCOP 		INT ,
+		NUMCOP 		int ,
 		DATASTAMP	DATE
 	)
-	BEGIN
-		INSERT INTO Versione_Stampa ( isbn ,num_copie ,data_stampa ) VALUE (CODICEISBN,NUMCOP ,DATASTAMP);
-	END $
+	begin
+		insert into Versione_Stampa ( isbn ,num_copie ,data_stampa ) value (CODICEISBN,NUMCOP ,DATASTAMP);
+	end $
 
-CREATE PROCEDURE  aggiorna_num_copie_versione_stampa( IN NUMCOP INT, IN IDVER INT)
-	BEGIN
-		UPDATE Versione_Stampa SET num_copie = NUMCOP WHERE id_versione_stampa = IDVER ;
-	END $
+create procedure  aggiorna_num_copie_versione_stampa( in NUMCOP int, in IDVER int)
+	begin
+		update Versione_Stampa set num_copie = NUMCOP where id_versione_stampa = IDVER ;
+	end $
 
-CREATE PROCEDURE  aggiorna_data_versione_stampa ( IN DATAVER DATE, IN IDVER INT )
-	BEGIN
-		UPDATE Versione_Stampa SET data_stampa = DATAVER WHERE id_versione_stampa = IDVER ;
-	END $
+create procedure  aggiorna_data_versione_stampa ( in DATAVER DATE, in IDVER int )
+	begin
+		update Versione_Stampa set data_stampa = DATAVER where id_versione_stampa = IDVER ;
+	end $
 
 
-CREATE PROCEDURE cancella_versione_stampa (IN IDVER INT )
-	BEGIN
-		DELETE FROM Versione_Stampa WHERE id_versione = IDVER ;
-	END $
+create procedure cancella_versione_stampa (in IDVER int )
+	begin
+		delete from Versione_Stampa where id_versione = IDVER ;
+	end $
 #
-#PROCEDURE MEDIATYPE
+#procedure MEDIATYPE
 #
 
-CREATE PROCEDURE aggiungi_mediatype 
+create procedure aggiungi_mediatype 
 	(
-		IN TIPO			VARCHAR(200) ,
-		IN FORMATO		VARCHAR(200)	
+		in TIPO			varchar(200) ,
+		in FORMATO		varchar(200)	
 	)
-	BEGIN
-		INSERT INTO Mediatype (tipo , formato) VALUE ( TIPO , FORMATO ) ;
-	END $
+	begin
+		insert into Mediatype (tipo , formato) value ( TIPO , FORMATO ) ;
+	end $
 
 
-CREATE PROCEDURE aggiorna_tipo_mediatype (IN TIPO VARCHAR(100) , IN IDVER INT )
-	BEGIN
-		UPDATE Mediatype SET tipo = TIPO WHERE id_mediatype = IDVER ;
-	END $
+create procedure aggiorna_tipo_mediatype (in TIPO varchar(100) , in IDVER int )
+	begin
+		update Mediatype set tipo = TIPO where id_mediatype = IDVER ;
+	end $
 
 
-CREATE PROCEDURE aggiorna_formato_mediatype (IN FORMATO VARCHAR(100) , IN IDVER INT )
-	BEGIN
-		UPDATE Mediatype SET formato = FORMATO WHERE id_mediatype = IDVER ;
-	END $
+create procedure aggiorna_formato_mediatype (in FORMATO varchar(100) , in IDVER int )
+	begin
+		update Mediatype set formato = FORMATO where id_mediatype = IDVER ;
+	end $
 
 
 
 #
-# PROCEDURE RISORSE
+# procedure RISORSE
 #
 
-CREATE PROCEDURE aggiungi_risorse 
+create procedure aggiungi_risorse 
 	(	
-		IN IDMEDIA INT ,
-		IN URI	VARCHAR(200),
-		IN DESCR VARCHAR(500)
+		in IDMEDIA int ,
+		in URI	varchar(200),
+		in DESCR varchar(500)
 	)
-BEGIN
-	INSERT INTO Risorse  (id_mediatype , uri , descrizione )VALUE (IDMEDIA , URI , DESCR);
-END $
+begin
+	insert into Risorse  (id_mediatype , uri , descrizione )value (IDMEDIA , URI , DESCR);
+end $
 
-CREATE PROCEDURE aggiorna_uri_risorse (IN URI VARCHAR(100) , IN IDRISORSA INT )
-	BEGIN
-		UPDATE Risorse SET uri = URI WHERE id_risorsa = IDRISORSA ;	
-	END $
+create procedure aggiorna_uri_risorse (in URI varchar(100) , in IDRISORSA int )
+	begin
+		update Risorse set uri = URI where id_risorsa = IDRISORSA ;	
+	end $
 
-CREATE PROCEDURE aggiorna_formato_risorse (IN DESCRIZ VARCHAR(100) , IN IDRISORSA INT )
-	BEGIN
-		UPDATE Risorse SET descrizione = DESCRIZ WHERE id_risorsa = IDRISORSA ;	
-	END $
+create procedure aggiorna_formato_risorse (in DESCRIZ varchar(100) , in IDRISORSA int )
+	begin
+		update Risorse set descrizione = DESCRIZ where id_risorsa = IDRISORSA ;	
+	end $
 
 
 
@@ -384,74 +383,89 @@ CREATE PROCEDURE aggiorna_formato_risorse (IN DESCRIZ VARCHAR(100) , IN IDRISORS
 #
 
 
-CREATE PROCEDURE aggiungi_recensione 
+create procedure aggiungi_recensione 
 	(
-		IN IDUTENTE INT ,
-		IDPUBB 	INT,
-		IN TESTO VARCHAR(1000)	
+		in IDUTENTE int ,
+		IDPUBB 	int,
+		in TESTO varchar(1000)	
 	)
-	BEGIN
-		INSERT INTO Recensione ( id_utente , id_pubblicazione , testo) VALUE (IDUTENTE , IDPUBB , TESTO);
-	END $
+	begin
+		insert into Recensione ( id_utente , id_pubblicazione , testo) value (IDUTENTE , IDPUBB , TESTO);
+	end $
 
-CREATE PROCEDURE cancella_recensione (IN IDUTENTE INT , IN IDPUBB INT)
-	BEGIN
-		DELETE FROM Recensione WHERE id_utente = IDUTENTE AND id_pubblicazione = IDPUBB ;
-	END $
+create procedure cancella_recensione (in IDUTENTE int , in IDPUBB int)
+	begin
+		delete from Recensione where id_utente = IDUTENTE and id_pubblicazione = IDPUBB ;
+	end $
 
-CREATE PROCEDURE aggiorna_stato_recensione ( IN IDUTENTE INT , IN IDPUBB INT )
-	BEGIN
-		UPDATE Recensione SET stato = 'APPROVATA' WHERE id_utente = IDUTENTE AND id_pubblicazione = IDPUBB ;
-	END $
+create procedure aggiorna_stato_recensione ( in IDUTENTE int , in IDPUBB int )
+	begin
+		update Recensione set stato = 'APPROVATA' where id_utente = IDUTENTE and id_pubblicazione = IDPUBB ;
+	end $
 
-CREATE PROCEDURE aggiorna_testo_recensione (IN IDUTENTE INT , IN IDPUBB INT , IN TESTO VARCHAR(1000) )
-	BEGIN
-		UPDATE Recensione SET testo = TESTO AND stato = 'IN ATTESA' AND data = CURRENT_TIMESTAMP WHERE id_utente = IDUTENTE AND id_pubblicazione = IDPUBB ;
-	END $
-
-#
-# PROCEDURE GRADIMENTO
-#
-
-
-
-CREATE PROCEDURE aggiungi_gradimento ( IN IDUTENTE INT , IN IDPUBB INT )
-	BEGIN
-		INSERT INTO Gradimento  ( id_utente , id_pubblicazione )VALUE (IDUTENTE , IDPUBB );
-	END $
-
-CREATE PROCEDURE cancella_gradimento (IN IDUTENTE INT , IN IDPUBB INT )
-	BEGIN
-		DELETE FROM Gradimento WHERE id_utente = IDUTENTE AND id_pubblicazione = IDPUBB ;
-	END $
-
+create procedure aggiorna_testo_recensione (in IDUTENTE int , in IDPUBB int , in TESTO varchar(1000) )
+	begin
+		update Recensione set testo = TESTO and stato = 'in ATTESA' and data = CURRENT_TIMESTAMP where id_utente = IDUTENTE and id_pubblicazione = IDPUBB ;
+	end $
 
 #
-# PROCEDURE ATTRIBUZIONE
+# procedure GRADIMENTO
 #
 
-CREATE PROCEDURE aggiungi_attribuzione ( IN IDPUBB BIGINT , IN IDAUT INT )
-	BEGIN
-		INSERT INTO Attribuzione VALUE (IDPUBB , IDAUT );
-	END $
 
-CREATE PROCEDURE cancella_attribuzione (IN IDPUBB BIGINT , IN IDAUT INT )
-	BEGIN
-		DELETE FROM Attribuzione WHERE  id_pubblicazione = IDPUBB AND id_autore = IDAUT ;
-	END $
+
+create procedure aggiungi_gradimento ( in IDUTENTE int , in IDPUBB int )
+	begin
+		insert into Gradimento  ( id_utente , id_pubblicazione )value (IDUTENTE , IDPUBB );
+	end $
+
+create procedure cancella_gradimento (in IDUTENTE int , in IDPUBB int )
+	begin
+		delete from Gradimento where id_utente = IDUTENTE and id_pubblicazione = IDPUBB ;
+	end $
+
+
 #
-# PROCEDURE LINK
+# procedure ATTRIBUZIONE
 #
 
-CREATE PROCEDURE aggiungi_link( IN IDPUBB INT,IN IDRIS INT )
-	BEGIN
-	INSERT INTO Link VALUE (IDPUBB , IDRIS );
-	END $
+create procedure aggiungi_attribuzione ( in IDPUBB BIGINT , in IDAUT int )
+	begin
+		insert into Attribuzione value (IDPUBB , IDAUT );
+	end $
 
-CREATE PROCEDURE cancella_link (IN IDPUBB INT , IN IDRIS INT )
-	BEGIN
-		DELETE FROM Link WHERE id_pubblicazione = IDPUBB AND id_risorsa= IDRIS;
-	END $
+create procedure cancella_attribuzione (in IDPUBB BIGINT , in IDAUT int )
+	begin
+		delete from Attribuzione where  id_pubblicazione = IDPUBB and id_autore = IDAUT ;
+	end $
+#
+# procedure LINK
+#
+
+create procedure aggiungi_link( in IDPUBB int,in IDRIS int )
+	begin
+	insert into Link value (IDPUBB , IDRIS );
+	end $
+
+create procedure cancella_link (in IDPUBB int , in IDRIS int )
+	begin
+		delete from Link where id_pubblicazione = IDPUBB and id_risorsa= IDRIS;
+	end $
+
+
+
+#
+#procedure STORICO
+#
+drop procedure if exists aggiungi_storico ;
+create procedure aggiungi_storico ( in idut int , in idpubb int , in descr varchar(100) , in oper varchar(20) )
+begin
+	insert into Storico (id_utente,id_pubblicazione, descrizione , operazione ) value ( idut , idpubb , descr , oper ) ;
+end $
+
+	
+
+
 
 
 

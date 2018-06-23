@@ -1,20 +1,21 @@
-DELIMITER $
+delimiter $
 
 # OPERAZIONE 1. Modifica del livello di un utente (da attivo a passivo e viceversa).
-DROP PROCEDURE IF EXISTS aggiorna_tipo_utente ; 
-CREATE PROCEDURE aggiorna_tipo_utente (IN EMAIL1 VARCHAR(100) )
+drop procedure if exists aggiorna_tipo_utente ; 
+create procedure aggiorna_tipo_utente (in email_utente varchar(100) )
 	BEGIN
-		DECLARE varq VARCHAR(10) ;
-		SET varq = ( SELECT tipo FROM Utente WHERE email = EMAIL1 ) ;
-		IF  strcmp( varq , 'ATTIVO') = 1
+		
+		DECLARE varq varchar(10) ;
+		set varq = get_id_utente( email_utente);
+		if  strcmp( varq , 'ATTIVO') = 1
 		THEN
 			select varq ;
-			call aggiorna_tipo_attivo(EMAIL1);
+			call aggiorna_tipo_attivo(email_utente);
 		ELSE
-			call aggiorna_tipo_passivo(EMAIL1);
-		END IF;
+			call aggiorna_tipo_passivo(email_utente);
+		end if;
 		
-	END $
+	end $
 
 
 
@@ -24,11 +25,11 @@ CREATE PROCEDURE aggiorna_tipo_utente (IN EMAIL1 VARCHAR(100) )
 
 # OPERAZIONE 2. Estrazione elenco delle ultime dieci pubblicazioni inserite.
 
-DROP PROCEDURE IF EXISTS seleziona_ultime_dieci_pubblicazioni_inserite ; 
-CREATE PROCEDURE seleziona_ultime_dieci_pubblicazioni_inserite( )
+drop procedure if exists seleziona_ultime_dieci_pubblicazioni_inserite ; 
+create procedure seleziona_ultime_dieci_pubblicazioni_inserite( )
 	BEGIN
 		select * from Pubblicazione order by data_inserimento DESC LIMIT 10 ;
-	END $
+	end $
 
 
 
@@ -39,11 +40,12 @@ CREATE PROCEDURE seleziona_ultime_dieci_pubblicazioni_inserite( )
 
 
 # OPERAZIONE 3. Estrazione elenco delle pubblicazioni aggiornate di recente (ultimi 30 giorni)
-DROP PROCEDURE IF EXISTS seleziona_pubblicazioni_ultima_mod_30giorni ; 
-CREATE PROCEDURE seleziona_pubblicazioni_ultima_mod_30giorni( )
+
+drop procedure if exists seleziona_pubblicazioni_ultima_mod_30giorni ; 
+create procedure seleziona_pubblicazioni_ultima_mod_30giorni( )
 	BEGIN
-		select * from Pubblicazione where data_ultima_modifica between ( CURRENT_TIMESTAMP - INTERVAL 30 DAY)  AND CURRENT_TIMESTAMP ; 
-	END $
+		select * from Pubblicazione where data_ultima_modifica between ( CURRENT_TIMESTAMP - INTERVAL 30 DAY)  and CURRENT_TIMESTAMP ; 
+	end $
 
 
 
@@ -58,11 +60,13 @@ CREATE PROCEDURE seleziona_pubblicazioni_ultima_mod_30giorni( )
 
 
 # OPERAZIONE 4. Estrazione elenco degli utenti più “collaborativi” (cioè quelli che hanno inserito più pubblicazioni).
-DROP PROCEDURE IF EXISTS seleziona_utenti_piu_collaborativi ; 
-CREATE PROCEDURE seleziona_utenti_piu_collaborativi( IN numutenti INT )
+# par numutenti è il numero per il limit nell operazione non è definito
+
+drop procedure if exists seleziona_utenti_piu_collaborativi ; 
+create procedure seleziona_utenti_piu_collaborativi( in numutenti int )
 	BEGIN
-		select * from Utente ORDER BY num_inserimenti DESC LIMIT numutenti ;
-	END $
+		select * from Utente order by num_inserimenti DESC LIMIT numutenti ;
+	end $
 
 
 
@@ -74,11 +78,11 @@ CREATE PROCEDURE seleziona_utenti_piu_collaborativi( IN numutenti INT )
 
 
 # OPERAZIONE 5. Estrazione elenco delle pubblicazioni inserite da un utente.
-DROP PROCEDURE IF EXISTS seleziona_pubblicazioni_inserite_da_un_utente ;
-CREATE PROCEDURE seleziona_pubblicazioni_inserite_da_un_utente( IN emailutente VARCHAR(100) )
+drop procedure if exists seleziona_pubblicazioni_inserite_da_un_utente ;
+create procedure seleziona_pubblicazioni_inserite_da_un_utente( in emailutente varchar(100) )
 	BEGIN
 	select * from Pubblicazione where rif_inserimento = emailutente ;
-	END $
+	end $
 
 
 
@@ -86,14 +90,14 @@ CREATE PROCEDURE seleziona_pubblicazioni_inserite_da_un_utente( IN emailutente V
 
 
 # OPERAZIONE 6. Estrazione catalogo, cioè elenco di tutte le pubblicazioni con titolo, autori, editore e anno di pubblicazione, ordinato per titolo.
-DROP PROCEDURE IF EXISTS estrazione_catalogo ;
-CREATE PROCEDURE estrazione_catalogo()
+drop procedure if exists estrazione_catalogo ;
+create procedure estrazione_catalogo()
 	BEGIN
- 			SELECT Pubblicazione.* , Metadati.isbn , GROUP_CONCAT( concat (Autore.nome , ' ', Autore.cognome) separator ' , ') AS Autori FROM  Pubblicazione
-							JOIN Metadati on Pubblicazione.id_pubblicazione = Metadati.id_pubblicazione  
-							JOIN Attribuzione on Metadati.isbn = Attribuzione.isbn  
-							JOIN Autore on Attribuzione.id_autore = Autore.id_autore GROUP BY Metadati.isbn ;
-END $
+ 			select Pubblicazione.* , Metadati.isbn , GROUP_CONCAT( concat (Autore.nome , ' ', Autore.cognome) separator ' , ') as Autori from  Pubblicazione
+							join Metadati on Pubblicazione.id_pubblicazione = Metadati.id_pubblicazione  
+							join Attribuzione on Metadati.isbn = Attribuzione.isbn  
+							join Autore on Attribuzione.id_autore = Autore.id_autore group by Metadati.isbn order by Pubblicazione.titolo ;
+end $
 
 
 
@@ -101,14 +105,14 @@ END $
 
 
 # OPERAZIONE 7. Estrazione dati completi di una pubblicazione specifica dato il suo ID.
-DROP PROCEDURE IF EXISTS estrazione_pubblicazione_dato_id ;
-CREATE PROCEDURE estrazione_pubblicazione_dato_id ( IN IDPUBB INT)
+drop procedure if exists estrazione_pubblicazione_dato_id ;
+create procedure estrazione_pubblicazione_dato_id ( in IDPUBB int)
 	BEGIN
-			SELECT Pubblicazione.* , Metadati.isbn , GROUP_CONCAT( concat (Autore.nome , ' ', Autore.cognome) separator ' , ') AS Autori FROM  Pubblicazione
-    						JOIN Metadati ON Pubblicazione.id_pubblicazione = Metadati.id_pubblicazione  
-							JOIN Attribuzione ON Metadati.isbn = Attribuzione.isbn  
-							JOIN Autore ON Attribuzione.id_autore = Autore.id_autore WHERE Pubblicazione.id_pubblicazione = 1 ;
-	END $
+			select Pubblicazione.* , Metadati.isbn , GROUP_CONCAT( concat (Autore.nome , ' ', Autore.cognome) separator ' , ') as Autori from  Pubblicazione
+    						join Metadati on Pubblicazione.id_pubblicazione = Metadati.id_pubblicazione  
+							join Attribuzione on Metadati.isbn = Attribuzione.isbn  
+							join Autore on Attribuzione.id_autore = Autore.id_autore where Pubblicazione.id_pubblicazione = 1 ;
+	end $
 
 
 
@@ -125,11 +129,11 @@ CREATE PROCEDURE estrazione_pubblicazione_dato_id ( IN IDPUBB INT)
 
 
 # OPERAZIONE 9. Inserimento di una recensione relativa a una pubblicazione.
-DROP PROCEDURE IF EXISTS inserimento_recensione ;
-CREATE PROCEDURE inserimento_recensione ( IN IDUTENTE INT ,	IDPUBB 	INT,IN TESTO VARCHAR(1000)	)
+drop procedure if exists inserimento_recensione ;
+create procedure inserimento_recensione ( in emailutente varchar(100) , in titolopubb varchar(100) ,in TESTO varchar(1000)	)
 	BEGIN
-		CALL aggiungi_recensione(IDUTENTE ,IDPUBB , TESTO );		
-	END $
+		call aggiungi_recensione(get_id_utente(emailutente) , get_id_pubblicazione(titolopubb) , TESTO );		
+	end $
 
 
 
@@ -138,11 +142,11 @@ CREATE PROCEDURE inserimento_recensione ( IN IDUTENTE INT ,	IDPUBB 	INT,IN TESTO
 
 
 # OPERAZIONE 10. Approvazione o di una recensione (da parte del moderatore).
-DROP PROCEDURE IF EXISTS approva_recensione ;
-CREATE PROCEDURE approva_recensione( IN IDPUBB INT , IN IDUTENTE INT )
+drop procedure if exists approva_recensione ;
+create procedure approva_recensione( in IDPUBB int , in IDUTENTE int )
 	BEGIN
 		call aggiorna_stato_recensione( IDPUBB , IDUTENTE );
-	END $	
+	end $	
 
 
 
@@ -153,30 +157,30 @@ CREATE PROCEDURE approva_recensione( IN IDPUBB INT , IN IDUTENTE INT )
 
 
 # OPERAZIONE 11. Inserimento di un like_ relativo a una pubblicazione.
-DROP PROCEDURE IF EXISTS aggiungi_like ;
-CREATE PROCEDURE aggiungi_like (IN IDUTENTE INT , IN IDPUBB INT)
+drop procedure if exists aggiungi_like ;
+create procedure aggiungi_like (in IDUTENTE int , in IDPUBB int)
 	BEGIN
 	
 		DECLARE all_ok BOOLEAN;
-		DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET all_ok = false;
-		SET all_ok = true;
+		DECLARE CONTINUE HANDLER FOR SQLEXCEPTION set all_ok = false;
+		set all_ok = true;
 		START TRANSACTION;
-		CALL aggiungi_gradimento( IDUTENTE , IDPUBB );
-		CALL aggiungi_uno_a_like(IDPUBB) ;
-		IF NOT all_ok THEN ROLLBACK;
+		call aggiungi_gradimento( IDUTENTE , IDPUBB );
+		call aggiungi_uno_a_like(IDPUBB) ;
+		if NOT all_ok THEN ROLLBACK;
 		ELSE COMMIT;
-		END IF;		
+		end if;		
 
 
-	END $
+	end $
 
 
 #HANDLER PER OPERAZIONE 11
-DROP PROCEDURE IF EXISTS aggiungi_uno_a_like ;
-CREATE PROCEDURE aggiungi_uno_a_like(IN IDPUBB INT )
+drop procedure if exists aggiungi_uno_a_like ;
+create procedure aggiungi_uno_a_like(in IDPUBB int )
 	BEGIN
-		UPDATE Pubblicazione SET numlike = numlike +1  WHERE id_pubblicazione = IDPUBB ;
-	END $
+		update Pubblicazione set numlike = numlike +1  where id_pubblicazione = IDPUBB ;
+	end $
 
 
 
@@ -185,11 +189,11 @@ CREATE PROCEDURE aggiungi_uno_a_like(IN IDPUBB INT )
 
 
 # OPERAZIONE 12. Calcolo numero dei like_ per una pubblicazione.
-DROP PROCEDURE IF EXISTS calcolo_numero_like ;
-CREATE PROCEDURE calcolo_numero_like ( IN IDPUBB INT )
+drop procedure if exists calcolo_numero_like ;
+create procedure calcolo_numero_like ( in IDPUBB int )
 	BEGIN
-		SELECT numlike FROM Pubblicazione WHERE id_pubblicazione = IDPUBB ;
-	END $
+		select numlike from Pubblicazione where id_pubblicazione = IDPUBB ;
+	end $
 
 
 
@@ -199,11 +203,11 @@ CREATE PROCEDURE calcolo_numero_like ( IN IDPUBB INT )
 
 
 # OPERAZIONE 13. Estrazione elenco delle recensioni approvate per una pubblicazione.
-DROP PROCEDURE IF EXISTS elenco_recensioni_approvate_pubblicazione ;
-CREATE PROCEDURE elenco_recensioni_approvate_pubblicazione ( IN IDPUBB INT)
+drop procedure if exists elenco_recensioni_approvate_pubblicazione ;
+create procedure elenco_recensioni_approvate_pubblicazione ( in IDPUBB int)
 	BEGIN
-		SELECT * FROM Recensione WHERE id_pubblicazione = IDPUBB AND stato = 'APPROVATA';
-	END $
+		select * from Recensione where id_pubblicazione = IDPUBB and stato = 'APPROVATA';
+	end $
 
 
 
@@ -214,11 +218,11 @@ CREATE PROCEDURE elenco_recensioni_approvate_pubblicazione ( IN IDPUBB INT)
 
 
 # OPERAZIONE 14. Estrazione elenco delle recensioni in_ attesa di approvazione.
-DROP PROCEDURE IF EXISTS elenco_recensioni_in_attesa ;
-CREATE PROCEDURE elenco_recensioni_in_attesa ( )
+drop procedure if exists elenco_recensioni_in_attesa ;
+create procedure elenco_recensioni_in_attesa ( )
 	BEGIN
-		SELECT * FROM Recensione WHERE stato = 'IN ATTESA';
-	END $
+		select * from Recensione where stato = 'in ATTESA';
+	end $
 
 
 
@@ -232,15 +236,15 @@ CREATE PROCEDURE elenco_recensioni_in_attesa ( )
 
 # OPERAZIONE 17. Estrazione della lista delle pubblicazioni in_ catalogo, ognuna con la data dell’ultima ristampa 
 # utilizzando group_by e order non funziona, cercando sembra che mariadb ignori order_by nellasottoquery -> risolto con limit (chiedere se va bene)
-DROP PROCEDURE IF EXISTS elenco_pubblicazioni_ultima_ristampa ;
-CREATE PROCEDURE elenco_pubblicazioni_ultima_ristampa()
+drop procedure if exists elenco_pubblicazioni_ultima_ristampa ;
+create procedure elenco_pubblicazioni_ultima_ristampa()
 	BEGIN
-		SELECT Pubblicazione.titolo , temp.data_stampa FROM Pubblicazione  
-			JOIN Metadati ON Pubblicazione.id_pubblicazione = Metadati.id_pubblicazione  
-			JOIN (select * from Versione_Stampa ORDER BY data_stampa LIMIT 123456 )  as temp ON Metadati.isbn = temp.isbn  GROUP BY Pubblicazione.titolo;
+		select Pubblicazione.titolo , temp.data_stampa from Pubblicazione  
+			join Metadati on Pubblicazione.id_pubblicazione = Metadati.id_pubblicazione  
+			join (select * from Versione_Stampa order by data_stampa LIMIT 123456 )  as temp on Metadati.isbn = temp.isbn  group by Pubblicazione.titolo;
 
 				
-	END $
+	end $
 	
 
 # OPERAZIONE 18. Data una pubblicazione, restituire tutte le pubblicazioni del catalogo aventi gli stessi autori
