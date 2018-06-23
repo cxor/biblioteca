@@ -1,4 +1,4 @@
-
+delete from mysql.proc where db = 'BIBLIOTECA';
 #
 # DELIMITATORE
 #
@@ -10,15 +10,15 @@ DELIMITER $
 #
 
 
-CREATE PROCEDURE aggiungi_utente( IN EMAIL VARCHAR(100), IN PASSWORD VARCHAR(100) ) 
+CREATE PROCEDURE aggiungi_utente( IN EMAILUTENTE VARCHAR(100), IN PASSWD VARCHAR(100) ) 
 	BEGIN
-		INSERT INTO Utente(email,password) VALUE ( EMAIL,PASSWORD);
+		INSERT INTO Utente(email,password) VALUE ( EMAILUTENTE,PASSWORD(PASSWD) );
 	END $ 
 
 
-CREATE PROCEDURE cancella_utente(IN EMAIL VARCHAR(100) )
+CREATE PROCEDURE cancella_utente(IN EMAILUTENTE VARCHAR(100) )
 	BEGIN
-		DELETE FROM Utente where email = EMAIL ;
+		DELETE FROM Utente where email = EMAILUTENTE ;
 	END $
 
 
@@ -27,25 +27,25 @@ CREATE PROCEDURE aggiorna_email (IN EMAILVECCHIA VARCHAR(100) , IN EMAILNUOVA VA
 		UPDATE Utente SET email = EMAILNUOVA WHERE email = EMAILVECCHIA ;
 	END $
 
-CREATE PROCEDURE aggiorna_password(IN PASSWORD VARCHAR(100) , IN EMAIL VARCHAR(100) )
+CREATE PROCEDURE aggiorna_password(IN PASSWORD VARCHAR(100) , IN EMAILUTENTE VARCHAR(100) )
 	BEGIN
-		UPDATE Utente SET password = PASSWORD WHERE email = EMAIL ;
+		UPDATE Utente SET password = PASSWORD WHERE email = EMAILUTENTE ;
 	END $
 
-CREATE PROCEDURE aggiorna_tipo_attivo( IN EMAIL VARCHAR(100) )
+CREATE PROCEDURE aggiorna_tipo_attivo( IN EMAILUTENTE VARCHAR(100) )
 	BEGIN 
-		UPDATE Utente SET tipo = 'ATTIVO' WHERE email = EMAIL ;
+		UPDATE Utente SET tipo = 'ATTIVO' WHERE email = EMAILUTENTE ;
 	END $
 
-CREATE PROCEDURE aggiorna_tipo_passivo( IN EMAIL VARCHAR(100) )
+CREATE PROCEDURE aggiorna_tipo_passivo( IN EMAILUTENTE VARCHAR(100) )
 	BEGIN 
-		UPDATE Utente SET tipo = 'PASSIVO' WHERE email = EMAIL ;
+		UPDATE Utente SET tipo = 'PASSIVO' WHERE email = EMAILUTENTE ;
 	END $
 
 
-CREATE PROCEDURE aggiorna_tipo( IN EMAIL VARCHAR(100) , IN TIPO VARCHAR(10) )
+CREATE PROCEDURE aggiorna_tipo( IN EMAILUTENTE VARCHAR(100) , IN TIPO VARCHAR(10) )
 	BEGIN 
-		UPDATE Utente SET tipo = TIPO WHERE email = EMAIL ;
+		UPDATE Utente SET tipo = TIPO WHERE email = EMAILUTENTE ;
 	END $
 
 
@@ -137,7 +137,7 @@ CREATE PROCEDURE aggiungi_pubblicazione
 	(
 	IN TITOLO VARCHAR(100) ,
 	IN CATEG  VARCHAR(100) ,
-	IN RIF INT
+	IN RIF 	  VARCHAR(100)
 	)
 	
 	BEGIN
@@ -171,7 +171,7 @@ CREATE PROCEDURE aggiungi_metadati
 		IN EDI				INT,
 		IN DATAPUBB 		DATE,
 		IN PAROLECHIAVE		VARCHAR(200),
-		IN ISBN				INT(13),
+		IN ISBN				BIGINT,
 		IN NUMPAGINE		INT,
 		IN LINGUA			VARCHAR(50),
 		IN SINOSSI			VARCHAR(1000)
@@ -181,43 +181,43 @@ CREATE PROCEDURE aggiungi_metadati
 		INSERT INTO Metadati VALUE (IDPUBB, EDI ,DATAPUBB ,PAROLECHIAVE ,ISBN ,NUMPAGINE ,LINGUA ,SINOSSI);
 	END $
 
-CREATE PROCEDURE cancella_metadati ( IN ISBN INT(13) )
+CREATE PROCEDURE cancella_metadati ( IN ISBN BIGINT )
 	BEGIN
 		DELETE FROM Metadati WHERE isbn = ISBN ;
 	END $
 
 
-CREATE PROCEDURE aggiorna_edizione_metadati (IN EDI INT , IN ISBN INT(13) )
+CREATE PROCEDURE aggiorna_edizione_metadati (IN EDI INT , IN ISBN BIGINT )
 	BEGIN
 		UPDATE Metadati SET edizione = EDI WHERE isbn = ISBN ; 
 	END $
 
-CREATE PROCEDURE aggiorna_data_pubblicazione_metadati (IN DATAPUBB DATE , IN ISBN INT(13) )
+CREATE PROCEDURE aggiorna_data_pubblicazione_metadati (IN DATAPUBB DATE , IN ISBN BIGINT )
 	BEGIN
 		UPDATE Metadati SET data_pubblicazione = DATAPUBB WHERE isbn = ISBN ; 
 	END $
 
-CREATE PROCEDURE aggiorna_parole_chiave_metadati (IN PAROLECHIAVE VARCHAR(200) , IN ISBN INT(13) )
+CREATE PROCEDURE aggiorna_parole_chiave_metadati (IN PAROLECHIAVE VARCHAR(200) , IN ISBN BIGINT )
 	BEGIN
 		UPDATE Metadati SET parole_chiave = PAROLECHIAVE WHERE isbn = ISBN ; 
 	END $
 
-CREATE PROCEDURE aggiorna_isbn_metadati (IN ISBNNEW INT(13), IN ISBN INT(13) )
+CREATE PROCEDURE aggiorna_isbn_metadati (IN ISBNNEW INT(13), IN ISBN BIGINT )
 	BEGIN
 		UPDATE Metadati SET isbn = ISBNNEW WHERE isbn = ISBN ; 
 	END $
 
-CREATE PROCEDURE aggiorna_num_pagine_metadati (IN NUMPAGINE INT,IN ISBN INT(13) )
+CREATE PROCEDURE aggiorna_num_pagine_metadati (IN NUMPAGINE INT,IN ISBN BIGINT )
 	BEGIN
 		UPDATE Metadati SET num_pagine = NUMPAGINE WHERE isbn = ISBN ; 
 	END $
 
-CREATE PROCEDURE aggiorna_lingua_metadati (IN LINGUA VARCHAR(50),IN ISBN INT(13) )
+CREATE PROCEDURE aggiorna_lingua_metadati (IN LINGUA VARCHAR(50),IN ISBN BIGINT )
 	BEGIN
 		UPDATE Metadati SET lingua = LINGUA WHERE isbn = ISBN ; 
 	END $
 
-CREATE PROCEDURE aggiorna_sinossi_metadati (IN SINOSSI VARCHAR(1000) , IN ISBN INT(13) )
+CREATE PROCEDURE aggiorna_sinossi_metadati (IN SINOSSI VARCHAR(1000) , IN ISBN BIGINT )
 	BEGIN
 		UPDATE Metadati SET sinossi = SINOSSI WHERE isbn = ISBN ; 
 	END $
@@ -295,22 +295,22 @@ CREATE PROCEDURE  aggiorna_num_capitolo( IN NUMCAP INT, IN IDCAP INT)
 
 CREATE PROCEDURE aggiungi_versione_stampa
 	(	
-		IDPUBB 		INT ,
+		IDPUBB 		BIGINT ,
 		NUMCOP 		INT ,
 		DATASTAMP	DATE
 	)
 	BEGIN
-		INSERT INTO Versione_Stampa ( id_pubblicazione ,num_copie ,data_stampa ) VALUE (IDPUBB,NUMCOP ,DATASTAMP);
+		INSERT INTO Versione_Stampa ( isbn ,num_copie ,data_stampa ) VALUE (IDPUBB,NUMCOP ,DATASTAMP);
 	END $
 
 CREATE PROCEDURE  aggiorna_num_copie_versione_stampa( IN NUMCOP INT, IN IDVER INT)
 	BEGIN
-		UPDATE Versione_Stampa SET num_copie = NUMCOP WHERE id_capitolo = IDVER ;
+		UPDATE Versione_Stampa SET num_copie = NUMCOP WHERE id_versione_stampa = IDVER ;
 	END $
 
 CREATE PROCEDURE  aggiorna_data_versione_stampa ( IN DATAVER DATE, IN IDVER INT )
 	BEGIN
-		UPDATE Versione_Stampa SET data_stampa = DATAVER WHERE id_capitolo = IDVER ;
+		UPDATE Versione_Stampa SET data_stampa = DATAVER WHERE id_versione_stampa = IDVER ;
 	END $
 
 
@@ -422,12 +422,12 @@ CREATE PROCEDURE cancella_gradimento (IN IDUTENTE INT , IN IDPUBB INT )
 # PROCEDURE ATTRIBUZIONE
 #
 
-CREATE PROCEDURE aggiungi_attribuzione ( IN IDPUBB INT , IN IDAUT INT )
+CREATE PROCEDURE aggiungi_attribuzione ( IN IDPUBB BIGINT , IN IDAUT INT )
 	BEGIN
 		INSERT INTO Attribuzione VALUE (IDPUBB , IDAUT );
 	END $
 
-CREATE PROCEDURE cancella_attribuzione (IN IDPUBB INT , IN IDAUT INT )
+CREATE PROCEDURE cancella_attribuzione (IN IDPUBB BIGINT , IN IDAUT INT )
 	BEGIN
 		DELETE FROM Attribuzione WHERE  id_pubblicazione = IDPUBB AND id_autore = IDAUT ;
 	END $
@@ -444,3 +444,13 @@ CREATE PROCEDURE cancella_link (IN IDPUBB INT , IN IDRIS INT )
 	BEGIN
 		DELETE FROM Link WHERE id_pubblicazione = IDPUBB AND id_risorsa= IDRIS;
 	END $
+
+
+
+#
+# reimposto il delimitatore ;
+#
+
+DELIMITER $
+
+

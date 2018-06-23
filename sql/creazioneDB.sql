@@ -45,7 +45,7 @@ CREATE TABLE Metadati (
 	edizione		INT NOT NULL,
 	data_pubblicazione 	DATE,
 	parole_chiave		VARCHAR(200),
-	isbn			INT(13) PRIMARY KEY,
+	isbn			BIGINT PRIMARY KEY,
 	num_pagine		INT,
 	lingua			VARCHAR(50),
 	sinossi			VARCHAR(1000),
@@ -70,11 +70,11 @@ CREATE TABLE Capitolo (
 );
 
 CREATE TABLE Versione_Stampa (
-	id_versione		INT PRIMARY KEY,
-	id_pubblicazione 	INT NOT NULL,
+	id_versione_stampa		INT AUTO_INCREMENT PRIMARY KEY,
+	isbn 			BIGINT NOT NULL,
 	num_copie 		INT NOT NULL,
 	data_stampa		DATE,
-	CONSTRAINT VERSIONESTAMPA_PUBBLICAZIONE FOREIGN KEY(id_pubblicazione) REFERENCES Pubblicazione(id_pubblicazione)
+	CONSTRAINT VERSIONESTAMPA_METADATI FOREIGN KEY(isbn) REFERENCES Metadati(isbn)
 );
 
 
@@ -132,7 +132,7 @@ CREATE TABLE Storico (
 
 
 CREATE TABLE Attribuzione(
-	isbn			 		INT NOT NULL,
+	isbn			 		BIGINT NOT NULL,
 	id_autore 				INT NOT NULL,
 	CONSTRAINT ATTRIBUZIONE_METADATI FOREIGN KEY (isbn) REFERENCES Metadati(isbn),
 	CONSTRAINT ATTRIBUZIONE_AUTORE FOREIGN KEY (id_autore) REFERENCES Autore(id_autore),
