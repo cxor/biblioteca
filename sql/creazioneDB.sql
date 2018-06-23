@@ -136,11 +136,11 @@ CREATE TABLE Storico (
 
 
 CREATE TABLE Attribuzione(
-	id_pubblicazione 		INT NOT NULL,
+	isbn			 		INT NOT NULL,
 	id_autore 				INT NOT NULL,
-	CONSTRAINT ATTRIBUZIONE_PUBBLICAZIONE FOREIGN KEY (id_pubblicazione) REFERENCES Pubblicazione(id_pubblicazione),
+	CONSTRAINT ATTRIBUZIONE_METDATI FOREIGN KEY (isbn) REFERENCES Metadati(isbn),
 	CONSTRAINT ATTRIBUZIONE_AUTORE FOREIGN KEY (id_autore) REFERENCES Autore(id_autore),
-	CONSTRAINT UNICA_ATTRIBUZIONE UNIQUE(id_pubblicazione, id_autore)
+	CONSTRAINT UNICA_ATTRIBUZIONE UNIQUE(isbn, id_autore)
 );
 
 
