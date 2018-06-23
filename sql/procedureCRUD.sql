@@ -141,7 +141,7 @@ CREATE PROCEDURE aggiungi_pubblicazione
 	)
 	
 	BEGIN
-		INSERT INTO Pubblicazione VALUE ( TITOLO , CATEG , RIF );
+		INSERT INTO Pubblicazione (titolo, categoria , rif_inserimento )VALUE ( TITOLO , CATEG , RIF );
 	END $
 
 
@@ -232,7 +232,7 @@ CREATE PROCEDURE aggiorna_sinossi_metadati (IN SINOSSI VARCHAR(1000) , IN ISBN I
 
 CREATE PROCEDURE aggiungi_autore  ( IN NOME VARCHAR(100) , IN COGNOME VARCHAR(100) )
 	BEGIN
-		INSERT INTO Autore VALUE ( NOME , COGNOME );
+		INSERT INTO Autore ( nome , cognome ) VALUE ( NOME , COGNOME );
 	END $
 
 CREATE PROCEDURE cancella_autore ( IN IDAUT INT)
@@ -263,7 +263,7 @@ CREATE PROCEDURE aggiungi_capitolo
 		NUMCAP			INT
 	)
 	BEGIN
-		INSERT INTO Capitolo VALUE (IDPUBB , TITOLO, DESCRIZIONE , NUMCAP);
+		INSERT INTO Capitolo (id_pubblicazione , titolo , descrizione , num_capitolo)  VALUE (IDPUBB , TITOLO, DESCRIZIONE , NUMCAP);
 	END $
 
 CREATE PROCEDURE cancella_capitolo ( IN IDCAP INT )
@@ -300,7 +300,7 @@ CREATE PROCEDURE aggiungi_versione_stampa
 		DATASTAMP	DATE
 	)
 	BEGIN
-		INSERT INTO Versione_Stampa VALUE (IDPUBB,NUMCOP ,DATASTAMP);
+		INSERT INTO Versione_Stampa ( id_pubblicazione ,num_copie ,data_stampa ) VALUE (IDPUBB,NUMCOP ,DATASTAMP);
 	END $
 
 CREATE PROCEDURE  aggiorna_num_copie_versione_stampa( IN NUMCOP INT, IN IDVER INT)
@@ -328,7 +328,7 @@ CREATE PROCEDURE aggiungi_mediatype
 		IN FORMATO		VARCHAR(200)	
 	)
 	BEGIN
-		INSERT INTO Mediatype VALUE ( TIPO , FORMATO ) ;
+		INSERT INTO Mediatype (tipo , formato) VALUE ( TIPO , FORMATO ) ;
 	END $
 
 
@@ -356,7 +356,7 @@ CREATE PROCEDURE aggiungi_risorse
 		IN DESCR VARCHAR(500)
 	)
 BEGIN
-	INSERT INTO Risorse VALUE (IDMEDIA , URI , DESCR);
+	INSERT INTO Risorse  (id_mediatype , uri , descrizione )VALUE (IDMEDIA , URI , DESCR);
 END $
 
 CREATE PROCEDURE aggiorna_uri_risorse (IN URI VARCHAR(100) , IN IDRISORSA INT )
@@ -383,7 +383,7 @@ CREATE PROCEDURE aggiungi_recensione
 		IN TESTO VARCHAR(1000)	
 	)
 	BEGIN
-		INSERT INTO Recensione VALUE (IDUTENTE , IDPUBB , TESTO);
+		INSERT INTO Recensione ( id_utente , id_pubblicazione , testo) VALUE (IDUTENTE , IDPUBB , TESTO);
 	END $
 
 CREATE PROCEDURE cancella_recensione (IN IDUTENTE INT , IN IDPUBB INT)
@@ -405,12 +405,11 @@ CREATE PROCEDURE aggiorna_testo_recensione (IN IDUTENTE INT , IN IDPUBB INT , IN
 # PROCEDURE GRADIMENTO
 #
 
-	id_utente				INT NOT NULL,
-	id_pubblicazione 		INT NOT NULL,
+
 
 CREATE PROCEDURE aggiungi_gradimento ( IN IDUTENTE INT , IN IDPUBB INT )
 	BEGIN
-		INSERT INTO Gradimento VALUE (IDUTENTE , IDPUBB );
+		INSERT INTO Gradimento  ( id_utente , id_pubblicazione )VALUE (IDUTENTE , IDPUBB );
 	END $
 
 CREATE PROCEDURE cancella_gradimento (IN IDUTENTE INT , IN IDPUBB INT )
@@ -418,3 +417,30 @@ CREATE PROCEDURE cancella_gradimento (IN IDUTENTE INT , IN IDPUBB INT )
 		DELETE FROM Gradimento WHERE id_utente = IDUTENTE AND id_pubblicazione = IDPUBB ;
 	END $
 
+
+#
+# PROCEDURE ATTRIBUZIONE
+#
+
+CREATE PROCEDURE aggiungi_attribuzione ( IN IDPUBB INT , IN IDAUT INT )
+	BEGIN
+		INSERT INTO Attribuzione VALUE (IDPUBB , IDAUT );
+	END $
+
+CREATE PROCEDURE cancella_attribuzione (IN IDPUBB INT , IN IDAUT INT )
+	BEGIN
+		DELETE FROM Attribuzione WHERE  id_pubblicazione = IDPUBB AND id_autore = IDAUT ;
+	END $
+#
+# PROCEDURE LINK
+#
+
+CREATE PROCEDURE aggiungi_link( IN IDPUBB INT,IN IDRIS INT )
+	BEGIN
+	INSERT INTO Link VALUE (IDPUBB , IDRIS );
+	END $
+
+CREATE PROCEDURE cancella_link (IN IDPUBB INT , IN IDRIS INT )
+	BEGIN
+		DELETE FROM Link WHERE id_pubblicazione = IDPUBB AND id_risorsa= IDRIS;
+	END $
