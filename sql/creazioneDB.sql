@@ -42,7 +42,8 @@ CREATE TABLE Pubblicazione (
 
 CREATE TABLE Metadati (
 	id_pubblicazione	INT,
-	edizione		INT NOT NULL,
+	edizione		INT DEFAULT 1 NOT NULL,
+	editore			VARCHAR(50),
 	data_pubblicazione 	DATE,
 	parole_chiave		VARCHAR(200),
 	isbn			BIGINT PRIMARY KEY,

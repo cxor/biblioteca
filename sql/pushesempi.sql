@@ -49,12 +49,12 @@ call aggiungi_pubblicazione ('titolo9','categ9', 'pippo@gmail.com');
 
 DELETE FROM Metadati;
 						
-call aggiungi_metadati(1, 2 ,'1800-01-01' ,'par1 par2 par3' ,1234567890123 ,987 ,'italiana' ,'asbstract pubblicazione1' );
-call aggiungi_metadati(2, 1 ,'1800-01-01' ,'par1 par2 par3' ,1234567890124 ,987 ,'italiana' ,'asbstract pubblicazione2' );
-call aggiungi_metadati(3, 1 ,'1800-01-01' ,'par1 par2 par3' ,1234567890125 ,987 ,'italiana' ,'asbstract pubblicazione3' );
-call aggiungi_metadati(4, 1 ,'1800-01-01' ,'par1 par2 par3' ,1234567890126 ,987 ,'italiana' ,'asbstract pubblicazione4' );
-call aggiungi_metadati(5, 1 ,'1800-01-01' ,'par1 par2 par3' ,1234567890127 ,987 ,'italiana' ,'asbstract pubblicazione5' );
-call aggiungi_metadati(6, 1 ,'1800-01-01' ,'par1 par2 par3' ,1234567890128 ,987 ,'italiana' ,'asbstract pubblicazione6' );
+call aggiungi_metadati(1, 2 ,'editore1','1800-01-01' ,'par1 par2 par3' ,1234567890123 ,987 ,'italiana' ,'asbstract pubblicazione1' );
+call aggiungi_metadati(2, 1 ,'editore2','1800-01-01' ,'par1 par2 par3' ,1234567890124 ,987 ,'italiana' ,'asbstract pubblicazione2' );
+call aggiungi_metadati(3, 1 ,'editore3','1800-01-01' ,'par1 par2 par3' ,1234567890125 ,987 ,'italiana' ,'asbstract pubblicazione3' );
+call aggiungi_metadati(4, 1 ,'editore4','1800-01-01' ,'par1 par2 par3' ,1234567890126 ,987 ,'italiana' ,'asbstract pubblicazione4' );
+call aggiungi_metadati(5, 1 ,'editore5','1800-01-01' ,'par1 par2 par3' ,1234567890127 ,987 ,'italiana' ,'asbstract pubblicazione5' );
+call aggiungi_metadati(6, 1 ,'editore6','1800-01-01' ,'par1 par2 par3' ,1234567890128 ,987 ,'italiana' ,'asbstract pubblicazione6' );
 
 
 #aggiunti autori

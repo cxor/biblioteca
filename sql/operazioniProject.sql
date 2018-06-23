@@ -42,10 +42,23 @@ CREATE PROCEDURE seleziona_utenti_piu_collaborativi( IN numutenti INT )
 		select * from Utente ORDER BY num_inserimenti DESC LIMIT numutenti ;
 	END $
 
+
+
 # OPERAZIONE 5. Estrazione elenco delle pubblicazioni inserite da un utente.
+DROP PROCEDURE IF EXISTS seleziona_pubblicazioni_inserite_da_un_utente ;
+CREATE PROCEDURE seleziona_pubblicazioni_inserite_da_un_utente( IN emailutente VARCHAR(100) )
+	BEGIN
+	select * from Pubblicazione where rif_inserimento = emailutente ;
+	END $
+
+
 
 # OPERAZIONE 6. Estrazione catalogo, cioè elenco di tutte le pubblicazioni con titolo, autori, editore e anno di pubblicazione, ordinato per titolo.
-
+DROP PROCEDURE IF EXISTS estrazione_catalogo()
+CREATE PROCEDURE estrazione_catalogo()
+	BEGIN
+		select distinct Pubblicazione.id_pubblicazione , Pubblicazione.titolo , Metadati.editore , Metadati.data_pubblicazione from  Pubblicazione JOIN Metadati on 			Pubblicazione.id_pubblicazione = Metadati.id_pubblicazione JOIN Attribuzione on Metadati.isbn = Attribuzione.isbn join Autore on Attribuzione.id_autore = 				Autore.id_autore ;
+	END $
 # OPERAZIONE 7. Estrazione dati completi di una pubblicazione specifica dato il suo ID.
 
 # OPERAZIONE 8. Ricerca di pubblicazioni per ISBN, titolo, autore, e parole chiave.
