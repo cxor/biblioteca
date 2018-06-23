@@ -54,22 +54,53 @@ CREATE PROCEDURE seleziona_pubblicazioni_inserite_da_un_utente( IN emailutente V
 
 
 # OPERAZIONE 6. Estrazione catalogo, cioè elenco di tutte le pubblicazioni con titolo, autori, editore e anno di pubblicazione, ordinato per titolo.
-DROP PROCEDURE IF EXISTS estrazione_catalogo()
+DROP PROCEDURE IF EXISTS estrazione_catalogo ;
 CREATE PROCEDURE estrazione_catalogo()
 	BEGIN
-		select distinct Pubblicazione.id_pubblicazione , Pubblicazione.titolo , Metadati.editore , Metadati.data_pubblicazione from  Pubblicazione JOIN Metadati on 			Pubblicazione.id_pubblicazione = Metadati.id_pubblicazione JOIN Attribuzione on Metadati.isbn = Attribuzione.isbn join Autore on Attribuzione.id_autore = 				Autore.id_autore ;
-	END $
+ 			SELECT Pubblicazione.* , Metadati.isbn , GROUP_CONCAT( concat (Autore.nome , ' ', Autore.cognome) separator ' , ') AS Autori FROM  Pubblicazione
+							JOIN Metadati on Pubblicazione.id_pubblicazione = Metadati.id_pubblicazione  
+							JOIN Attribuzione on Metadati.isbn = Attribuzione.isbn  
+							JOIN Autore on Attribuzione.id_autore = Autore.id_autore GROUP BY Metadati.isbn ;
+END $
+
+
 # OPERAZIONE 7. Estrazione dati completi di una pubblicazione specifica dato il suo ID.
+DROP PROCEDURE IF EXISTS estrazione_pubblicazione_dato_id ;
+CREATE PROCEDURE estrazione_pubblicazione_dato_id ( IN IDPUBB INT)
+	BEGIN
+			SELECT Pubblicazione.* , Metadati.isbn , GROUP_CONCAT( concat (Autore.nome , ' ', Autore.cognome) separator ' , ') AS Autori FROM  Pubblicazione
+    						JOIN Metadati ON Pubblicazione.id_pubblicazione = Metadati.id_pubblicazione  
+							JOIN Attribuzione ON Metadati.isbn = Attribuzione.isbn  
+							JOIN Autore ON Attribuzione.id_autore = Autore.id_autore WHERE Pubblicazione.id_pubblicazione = 1 ;
+	END $
+
 
 # OPERAZIONE 8. Ricerca di pubblicazioni per ISBN, titolo, autore, e parole chiave.
 
 # OPERAZIONE 9. Inserimento di una recensione relativa a una pubblicazione.
 
 # OPERAZIONE 10. Approvazione o di una recensione (da parte del moderatore).
+DROP PROCEDURE IF EXISTS approva_recensione ;
+CREATE PROCEDURE approva_recensione( IN IDPUBB INT , IN IDUTENTE INT )
+	BEGIN
+		call aggiorna_stato_recensione( IDPUBB , IDUTENTE );
+	END $	
+
 
 # OPERAZIONE 11. Inserimento di un like_ relativo a una pubblicazione.
+DROP PROCEDURE IF EXISTS aggiungi_like ;
+CREATE PROCEDURE aggiungi_like (IN IDUTENTE INT , IN IDPUBB INT)
+	BEGIN
+		
+	END $
 
 # OPERAZIONE 12. Calcolo numero dei like_ per una pubblicazione.
+DROP PROCEDURE IF EXISTS calcolo_numero_like ;
+CREATE PROCEDURE calcolo_numero_like ( IN IDPUBB INT )
+	BEGIN
+	Select numlike from Pubblicazione where id_pubblicazione = IDPUBB ;
+	END $
+
 
 # OPERAZIONE 13. Estrazione elenco delle recensioni approvate per una pubblicazione.
 
