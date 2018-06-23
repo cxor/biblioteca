@@ -108,7 +108,7 @@ CREATE TABLE Recensione (
 	CONSTRAINT UNICA_RECENSIONE UNIQUE(id_utente , id_pubblicazione)
 );
 	
-# La tabella sottostante Gradimento corrisponde alla tabella Like, tuttavia MySQL non permette di utilizzare
+# La tabella sottostante Gradimento corrisponde alla tabella Like, tuttavia MySQL non permette di utilizzar
 CREATE TABLE Gradimento (
 	id_utente		INT NOT NULL,
 	id_pubblicazione 	INT NOT NULL,
