@@ -10,7 +10,7 @@ USE BIBLIOTECA
 
 create table Utente (
 	id_utente    		int AUTO_INCREMENT PRIMARY KEY,
-	email 		 	varchar(250) not NULL,
+	email 		 	varchar(50) not NULL,
 	password	 	varchar(250) not NULL,
 	tipo		 	varchar(50)  not NULL default 'PASSIVO',
 	num_inserimenti 	int default 0, 	
@@ -21,7 +21,7 @@ create table Anagrafica (
 	id_utente  		int PRIMARY KEY,
 	nome  		 	varchar(250) not NULL,
 	cognome		 	varchar(250) not NULL,	
-	cf		 	varchar(250) not NULL,
+	cf		 	varchar(50) not NULL,
 	data_nascita  		DATE	     not NULL,
 	luogo_nascita 		varchar(250) not NULL,
 	nazionalita		varchar(250) not NULL,
@@ -36,7 +36,7 @@ create table Pubblicazione (
 	data_ultima_modifica 	TIMESTAMP default CURRENT_TIMESTAMP,
 	categoria 		varchar(250) not NULL,
 	numlike		 	int default 0,
-	rif_inserimento 	varchar(250) not NULL,
+	rif_inserimento 	varchar(50) not NULL,
 	CONSTRAINT PUBBLICAZIONE_UTENTE FOREIGN KEY (rif_inserimento) REFERENCES Utente(email) 	# decidereondelete
 );
 

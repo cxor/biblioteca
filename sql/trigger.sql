@@ -34,22 +34,24 @@ create trigger inserimento_pubblicazione_trg
 drop trigger if exists inserimento_metadati_trg;
 create trigger inserimento_metadati_trg 
 	after insert on Metadati FOR EACH ROW
+
 	begin
-	declare var_des varchar(1000);	
-	declare var_op varchar(250);
-	declare idutente int;
-	declare emailutente varchar(250);
-	set emailutente = get_email_by_isbn(NEW.isbn);
-	set idutente = get_id_utente( emailutente );
-	set var_des = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj';
-	set var_op ='INSERIMENTO METADATI';
-#concat (concat('ed->',NEW.edizione ,' data->',NEW.data_pubblicazione ),     
-#	concat('par->',NEW.parole_chiave,'isbn>',NEW.isbn ,'num.pag>',NEW.num_pagine ,'lin->', NEW.lingua , 'sin->' ,  NEW.sinossi )) ;
 
-	#da aggiustare non prende tutta la stringa 
+		declare var_des varchar(1000);	
+		declare var_op varchar(250);
+		declare idutente int;
+		declare emailutente varchar(250);
 
-	call aggiungi_storico ( idutente , NEW.id_pubblicazione , var_des	,var_op );
+		set emailutente = get_email_by_isbn(NEW.isbn);
+		set idutente = get_id_utente( emailutente );
+		set var_des = concat(	'l\'utente ',emailutente,' ha inserito i metadati per la pubblicazione',get_titolo_pubblicazione( NEW.id_pubblicazione) ,
+							 	':edizione->',NEW.edizione ,' data->', NEW.data_pubblicazione,' parole chiave-> ',NEW.parole_chiave,'isbn-> ', 										NEW.isbn ,'num.pagine-> ',NEW.num_pagine ,' lingua->', NEW.lingua , ' abstract-> ' ,  NEW.sinossi ) ;
+
+		set var_op ='INSERIMENTO METADATI';
+
+		call aggiungi_storico ( idutente , NEW.id_pubblicazione , var_des	,var_op );
 	end $
+
 
 drop trigger if exists inserimento_recensione_trg;
 create trigger inserimento_recensione_trg
