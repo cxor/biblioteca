@@ -23,7 +23,11 @@ drop trigger if exists inserimento_pubblicazione_trg;
 create trigger inserimento_pubblicazione_trg 
 	after insert on Pubblicazione FOR EACH ROW
 	begin
-	call aggiungi_storico(get_id_utente(NEW.rif_inserimento) , NEW.id_pubblicazione , concat(' ha inserito la pubblicazione ',NEW.titolo) ,'INSERIMENTO PUBBLICAZIONE');
+	declare var_des varchar(1000);
+	declare var_op varchar(250);
+	set var_des = concat(' ha inserito la pubblicazione ',NEW.titolo)  ;
+	set var_op = 'INSERIMENTO PUBBLICAZIONE';
+	call aggiungi_storico(get_id_utente(NEW.rif_inserimento) , NEW.id_pubblicazione , var_des,var_op);
 	end $
 
 
@@ -31,24 +35,31 @@ drop trigger if exists inserimento_metadati_trg;
 create trigger inserimento_metadati_trg 
 	after insert on Metadati FOR EACH ROW
 	begin
-	declare var_stringa varchar(1000);	
+	declare var_des varchar(1000);	
+	declare var_op varchar(250);
 	declare idutente int;
-	declare emailutente varchar(100);
+	declare emailutente varchar(250);
 	set emailutente = get_email_by_isbn(NEW.isbn);
 	set idutente = get_id_utente( emailutente );
-	set var_stringa = concat (concat('ed->',NEW.edizione ,' data->',NEW.data_pubblicazione ),     
-	concat('par->',NEW.parole_chiave,'isbn>',NEW.isbn ,'num.pag>',NEW.num_pagine ,'lin->', NEW.lingua , 'sin->' ,  NEW.sinossi )) ;
+	set var_des = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj';
+	set var_op ='INSERIMENTO METADATI';
+#concat (concat('ed->',NEW.edizione ,' data->',NEW.data_pubblicazione ),     
+#	concat('par->',NEW.parole_chiave,'isbn>',NEW.isbn ,'num.pag>',NEW.num_pagine ,'lin->', NEW.lingua , 'sin->' ,  NEW.sinossi )) ;
 
 	#da aggiustare non prende tutta la stringa 
 
-	call aggiungi_storico ( idutente , NEW.id_pubblicazione , var_stringa	,'INSERIMENTO METADATI'  );
+	call aggiungi_storico ( idutente , NEW.id_pubblicazione , var_des	,var_op );
 	end $
 
 drop trigger if exists inserimento_recensione_trg;
 create trigger inserimento_recensione_trg
 	after insert on Recensione FOR EACH ROW 
 	begin
-	call aggiungi_storico ( NEW.id_utente , NEW.id_pubblicazione , concat('ha inserito la recensione: ',NEW.testo)	,'INSERIMENTO RECENSIONE'  );
+	declare var_des varchar(1000);
+	declare var_op varchar(250);
+	set var_des = concat('ha inserito la recensione: ',NEW.testo)	;
+	set var_op = 'INSERIMENTO RECENSIONE' ;
+	call aggiungi_storico ( NEW.id_utente , NEW.id_pubblicazione , var_des ,var_op );
 	end $
 
 
@@ -56,7 +67,11 @@ drop trigger if exists inserimento_gradimento_trg;
 create trigger inserimento_gradimento_trg
 	after insert on Gradimento FOR EACH ROW 
 	begin
-	call aggiungi_storico ( NEW.id_utente , NEW.id_pubblicazione , 'ha inserito un like '	,'INSERIMENTO RECENSIONE'  );
+	declare var_des varchar(1000);
+	declare var_op varchar(250);
+	set var_des = 'ha inserito un like ';
+	set var_op = 'INSERIMENTO  LIKE';
+	call aggiungi_storico ( NEW.id_utente , NEW.id_pubblicazione , var_des	,var_op  );
 	end $
 
 

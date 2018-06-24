@@ -10,40 +10,40 @@ DELIMITER $
 #
 
 
-create procedure aggiungi_utente( in EMAILUTENTE varchar(100), in PASSWD varchar(100) ) 
+create procedure aggiungi_utente( in EMAILUTENTE varchar(250), in PASSWD varchar(250) ) 
 	begin
 		insert into Utente(email,password) value ( EMAILUTENTE,PASSWORD(PASSWD) );
 	end $ 
 
 
-create procedure cancella_utente(in EMAILUTENTE varchar(100) )
+create procedure cancella_utente(in EMAILUTENTE varchar(250) )
 	begin
 		delete from Utente where email = EMAILUTENTE ;
 	end $
 
 
-create procedure aggiorna_email (in EMAILVECCHIA varchar(100) , in EMAILNUOVA varchar(100) )
+create procedure aggiorna_email (in EMAILVECCHIA varchar(250) , in EMAILNUOVA varchar(250) )
 	begin
 		update Utente set email = EMAILNUOVA where email = EMAILVECCHIA ;
 	end $
 
-create procedure aggiorna_password(in PASSWORD varchar(100) , in EMAILUTENTE varchar(100) )
+create procedure aggiorna_password(in PASSWORD varchar(250) , in EMAILUTENTE varchar(250) )
 	begin
 		update Utente set password = PASSWORD where email = EMAILUTENTE ;
 	end $
 
-create procedure aggiorna_tipo_attivo( in EMAILUTENTE varchar(100) )
+create procedure aggiorna_tipo_attivo( in EMAILUTENTE varchar(250) )
 	begin 
 		update Utente set tipo = 'ATTIVO' where email = EMAILUTENTE ;
 	end $
 
-create procedure aggiorna_tipo_passivo( in EMAILUTENTE varchar(100) )
+create procedure aggiorna_tipo_passivo( in EMAILUTENTE varchar(250) )
 	begin 
 		update Utente set tipo = 'PASSIVO' where email = EMAILUTENTE ;
 	end $
 
 
-create procedure aggiorna_tipo( in EMAILUTENTE varchar(100) , in TIPO varchar(10) )
+create procedure aggiorna_tipo( in EMAILUTENTE varchar(250) , in TIPO varchar(250) )
 	begin 
 		update Utente set tipo = TIPO where email = EMAILUTENTE ;
 	end $
@@ -58,12 +58,12 @@ create procedure aggiungi_anagrafica
 
 (
 	in IDUTENTE int,
-	in NOME  varchar(100),
-	in COGNOME varchar(100),
-	in CF varchar(100),
+	in NOME  varchar(250),
+	in COGNOME varchar(250),
+	in CF varchar(250),
 	in DATADINASCITA DATE,
-	in LUOGODINASCITA varchar(100),
-	in NAZIONE varchar(100)
+	in LUOGODINASCITA varchar(250),
+	in NAZIONE varchar(250)
 )
 
 	begin
@@ -84,7 +84,7 @@ create procedure cancella_anagrafica ( in IDUTENTE int )
 
 #update NOME
 
-create procedure aggiorna_nome (in NUOVONOME varchar(100) , in IDUTENTE int )
+create procedure aggiorna_nome (in NUOVONOME varchar(250) , in IDUTENTE int )
 	begin
 	update Anagrafica set nome= NUOVONOME where id_utente = IDUTENTE ;
 	end $
@@ -92,7 +92,7 @@ create procedure aggiorna_nome (in NUOVONOME varchar(100) , in IDUTENTE int )
 
 #update COGNOME
 
-create procedure aggiorna_cognome(in NUOVOCOGNOME varchar(100), in IDUTENTE int)
+create procedure aggiorna_cognome(in NUOVOCOGNOME varchar(250), in IDUTENTE int)
 	begin
         update Anagrafica set cognome= NUOVOCOGNOME where id_utente = IDUTENTE ;
         end $
@@ -100,7 +100,7 @@ create procedure aggiorna_cognome(in NUOVOCOGNOME varchar(100), in IDUTENTE int)
 
 #update CODICE FISCALE
 
-create procedure aggiorna_cf ( in NUOVOCF varchar(100) , in IDUTENTE int )
+create procedure aggiorna_cf ( in NUOVOCF varchar(250) , in IDUTENTE int )
         begin
         update Anagrafica set cf = NUOVOCF where id_utente = IDUTENTE ;
         end $
@@ -116,14 +116,14 @@ create procedure aggiorna_data_nascita (in NUOVADATA Date, in IDUTENTE int )
 
 #update LUOGO DI NASCITA
 
-create procedure aggiorna_luogo_nascita(in NUOVOLUOGO varchar(100), in IDUTENTE int)
+create procedure aggiorna_luogo_nascita(in NUOVOLUOGO varchar(250), in IDUTENTE int)
         begin
         update Anagrafica set luogo_nascita = NUOVOLUOGO where id_utente = IDUTENTE;
         end $
 
 
 #update NAZIONE
-create procedure aggiorna_nazionalita (in NUOVANAZIONE varchar(100), in IDUTENTE int)
+create procedure aggiorna_nazionalita (in NUOVANAZIONE varchar(250), in IDUTENTE int)
         begin
         update Anagrafica set nazionalita = NUOVANAZIONE where id_utente = IDUTENTE ;
         end $
@@ -135,9 +135,9 @@ create procedure aggiorna_nazionalita (in NUOVANAZIONE varchar(100), in IDUTENTE
 
 create procedure aggiungi_pubblicazione 
 	(
-	in TITOLO varchar(100) ,
-	in CATEG  varchar(100) ,
-	in RIF 	  varchar(100)
+	in TITOLO varchar(250) ,
+	in CATEG  varchar(250) ,
+	in RIF 	  varchar(250)
 	)
 	
 	begin
@@ -151,12 +151,12 @@ create procedure cancella_pubblicazione (in IDPUBB int )
 	end $
 
 
-create procedure aggiorna_titolo   (in IDPUBB int , in STRNG varchar(100))
+create procedure aggiorna_titolo   (in IDPUBB int , in STRNG varchar(250))
 	begin
 		update Pubblicazione set titolo = STRNG where id_pubblicazione = IDPUBB ; 
 	end $
 
-create procedure aggiorna_categoria(in IDPUBB int , in STRNG varchar(100))
+create procedure aggiorna_categoria(in IDPUBB int , in STRNG varchar(250))
 	begin
 		update Pubblicazione set categoria = STRNG where id_pubblicazione = IDPUBB ; 
 	end $
@@ -171,12 +171,12 @@ create procedure aggiungi_metadati
 	(
 		in IDPUBB 			int,
 		in EDIZIONE			int,
-		in EDITORE			varchar(50),
+		in EDITORE			varchar(250),
 		in DATAPUBB 		DATE,
-		in PAROLECHIAVE		varchar(200),
+		in PAROLECHIAVE		varchar(250),
 		in ISBN				BIGINT,
 		in NUMPAGINE		int,
-		in LINGUA			varchar(50),
+		in LINGUA			varchar(250),
 		in SINOSSI			varchar(1000)
 	)
 
@@ -205,7 +205,7 @@ create procedure aggiorna_data_pubblicazione_metadati (in DATAPUBB DATE , in ISB
 		update Metadati set data_pubblicazione = DATAPUBB where isbn = ISBN ; 
 	end $
 
-create procedure aggiorna_parole_chiave_metadati (in PAROLECHIAVE varchar(200) , in ISBN BIGINT )
+create procedure aggiorna_parole_chiave_metadati (in PAROLECHIAVE varchar(250) , in ISBN BIGINT )
 	begin
 		update Metadati set parole_chiave = PAROLECHIAVE where isbn = ISBN ; 
 	end $
@@ -220,7 +220,7 @@ create procedure aggiorna_num_pagine_metadati (in NUMPAGINE int,in ISBN BIGINT )
 		update Metadati set num_pagine = NUMPAGINE where isbn = ISBN ; 
 	end $
 
-create procedure aggiorna_lingua_metadati (in LINGUA varchar(50),in ISBN BIGINT )
+create procedure aggiorna_lingua_metadati (in LINGUA varchar(250),in ISBN BIGINT )
 	begin
 		update Metadati set lingua = LINGUA where isbn = ISBN ; 
 	end $
@@ -238,7 +238,7 @@ create procedure aggiorna_sinossi_metadati (in SINOSSI varchar(1000) , in ISBN B
 
 
 
-create procedure aggiungi_autore  ( in NOME varchar(100) , in COGNOME varchar(100) )
+create procedure aggiungi_autore  ( in NOME varchar(250) , in COGNOME varchar(250) )
 	begin
 		insert into Autore ( nome , cognome ) value ( NOME , COGNOME );
 	end $
@@ -248,12 +248,12 @@ create procedure cancella_autore ( in IDAUT int)
 		delete from Autore where id_autore = IDAUT ;
 	end $
 
-create procedure  aggiorna_nome_autore( in NOME varchar(100), in IDAUT int)
+create procedure  aggiorna_nome_autore( in NOME varchar(250), in IDAUT int)
 	begin
 		update Autore set nome =NOME where id_autore = IDAUT ;
 	end $
 
-create procedure  aggiorna_cognome_autore( in COGNOME varchar(100), in IDAUT int)
+create procedure  aggiorna_cognome_autore( in COGNOME varchar(250), in IDAUT int)
 	begin
 		update Autore set cognome =COGNOME where id_autore = IDAUT ;
 	end $
@@ -266,8 +266,8 @@ create procedure  aggiorna_cognome_autore( in COGNOME varchar(100), in IDAUT int
 create procedure aggiungi_capitolo
 	(
 		IDPUBB			int,
-		TITOLO  		varchar(100) ,
-		DESCRIZIONE		varchar(500) ,
+		TITOLO  		varchar(250) ,
+		DESCRIZIONE		varchar(1000) ,
 		NUMCAP			int
 	)
 	begin
@@ -279,12 +279,12 @@ create procedure cancella_capitolo ( in IDCAP int )
 		delete from Capitolo where id_capitolo = IDCAP ;
 	end $
 
-create procedure  aggiorna_titolo_capitolo( in TITOLO varchar(100), in IDCAP int)
+create procedure  aggiorna_titolo_capitolo( in TITOLO varchar(250), in IDCAP int)
 	begin
 		update Capitolo set titolo = TITOLO where id_capitolo = IDAUT ;
 	end $
 
-create procedure  aggiorna_descrizione_capitolo( in DESCRIZIONE varchar(500), in IDCAP int)
+create procedure  aggiorna_descrizione_capitolo( in DESCRIZIONE varchar(1000), in IDCAP int)
 	begin
 		update Capitolo set descrizione = DESCRIZIONE where id_capitolo = IDAUT ;
 	end $
@@ -331,21 +331,21 @@ create procedure cancella_versione_stampa (in IDVER int )
 
 create procedure aggiungi_mediatype 
 	(
-		in TIPO			varchar(200) ,
-		in FORMATO		varchar(200)	
+		in TIPO			varchar(250) ,
+		in FORMATO		varchar(250)	
 	)
 	begin
 		insert into Mediatype (tipo , formato) value ( TIPO , FORMATO ) ;
 	end $
 
 
-create procedure aggiorna_tipo_mediatype (in TIPO varchar(100) , in IDVER int )
+create procedure aggiorna_tipo_mediatype (in TIPO varchar(250) , in IDVER int )
 	begin
 		update Mediatype set tipo = TIPO where id_mediatype = IDVER ;
 	end $
 
 
-create procedure aggiorna_formato_mediatype (in FORMATO varchar(100) , in IDVER int )
+create procedure aggiorna_formato_mediatype (in FORMATO varchar(250) , in IDVER int )
 	begin
 		update Mediatype set formato = FORMATO where id_mediatype = IDVER ;
 	end $
@@ -359,19 +359,19 @@ create procedure aggiorna_formato_mediatype (in FORMATO varchar(100) , in IDVER 
 create procedure aggiungi_risorse 
 	(	
 		in IDMEDIA int ,
-		in URI	varchar(200),
-		in DESCR varchar(500)
+		in URI	varchar(250),
+		in DESCR varchar(1000)
 	)
 begin
 	insert into Risorse  (id_mediatype , uri , descrizione )value (IDMEDIA , URI , DESCR);
 end $
 
-create procedure aggiorna_uri_risorse (in URI varchar(100) , in IDRISORSA int )
+create procedure aggiorna_uri_risorse (in URI varchar(250) , in IDRISORSA int )
 	begin
 		update Risorse set uri = URI where id_risorsa = IDRISORSA ;	
 	end $
 
-create procedure aggiorna_formato_risorse (in DESCRIZ varchar(100) , in IDRISORSA int )
+create procedure aggiorna_formato_risorse (in DESCRIZ varchar(250) , in IDRISORSA int )
 	begin
 		update Risorse set descrizione = DESCRIZ where id_risorsa = IDRISORSA ;	
 	end $
@@ -458,7 +458,7 @@ create procedure cancella_link (in IDPUBB int , in IDRIS int )
 #procedure STORICO
 #
 drop procedure if exists aggiungi_storico ;
-create procedure aggiungi_storico ( in idut int , in idpubb int , in descr varchar(100) , in oper varchar(20) )
+create procedure aggiungi_storico ( in idut int , in idpubb int , in descr varchar(1000) , in oper varchar(40) )
 begin
 	insert into Storico (id_utente,id_pubblicazione, descrizione , operazione ) value ( idut , idpubb , descr , oper ) ;
 end $

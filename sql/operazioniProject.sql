@@ -2,10 +2,10 @@ delimiter $
 
 # OPERAZIONE 1. Modifica del livello di un utente (da attivo a passivo e viceversa).
 drop procedure if exists aggiorna_tipo_utente ; 
-create procedure aggiorna_tipo_utente (in email_utente varchar(100) )
+create procedure aggiorna_tipo_utente (in email_utente varchar(250) )
 	BEGIN
 		
-		DECLARE varq varchar(10) ;
+		DECLARE varq varchar(250) ;
 		set varq = get_id_utente( email_utente);
 		if  strcmp( varq , 'ATTIVO') = 1
 		THEN
@@ -79,7 +79,7 @@ create procedure seleziona_utenti_piu_collaborativi( in numutenti int )
 
 # OPERAZIONE 5. Estrazione elenco delle pubblicazioni inserite da un utente.
 drop procedure if exists seleziona_pubblicazioni_inserite_da_un_utente ;
-create procedure seleziona_pubblicazioni_inserite_da_un_utente( in emailutente varchar(100) )
+create procedure seleziona_pubblicazioni_inserite_da_un_utente( in emailutente varchar(250) )
 	BEGIN
 	select * from Pubblicazione where rif_inserimento = emailutente ;
 	end $
@@ -126,7 +126,7 @@ create procedure estrazione_pubblicazione_dato_id ( in IDPUBB int)
 
 # OPERAZIONE 9. Inserimento di una recensione relativa a una pubblicazione.
 drop procedure if exists inserimento_recensione ;
-create procedure inserimento_recensione ( in emailutente varchar(100) , in titolopubb varchar(100) ,in TESTO varchar(1000)	)
+create procedure inserimento_recensione ( in emailutente varchar(250) , in titolopubb varchar(250) ,in TESTO varchar(1000)	)
 	BEGIN
 		call aggiungi_recensione(get_id_utente(emailutente) , get_id_pubblicazione(titolopubb) , TESTO );		
 	end $

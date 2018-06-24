@@ -10,33 +10,33 @@ USE BIBLIOTECA
 
 create table Utente (
 	id_utente    		int AUTO_INCREMENT PRIMARY KEY,
-	email 		 	varchar(100) not NULL,
-	password	 	varchar(100) not NULL,
-	tipo		 	varchar(10)  not NULL default 'PASSIVO',
+	email 		 	varchar(250) not NULL,
+	password	 	varchar(250) not NULL,
+	tipo		 	varchar(50)  not NULL default 'PASSIVO',
 	num_inserimenti 	int default 0, 	
 	CONSTRAINT UNICA_EMAIL 	unique(email)
 );
 
 create table Anagrafica (
 	id_utente  		int PRIMARY KEY,
-	nome  		 	varchar(100) not NULL,
-	cognome		 	varchar(100) not NULL,	
-	cf		 	varchar(100) not NULL,
+	nome  		 	varchar(250) not NULL,
+	cognome		 	varchar(250) not NULL,	
+	cf		 	varchar(250) not NULL,
 	data_nascita  		DATE	     not NULL,
-	luogo_nascita 		varchar(100) not NULL,
-	nazionalita		varchar(100) not NULL,
+	luogo_nascita 		varchar(250) not NULL,
+	nazionalita		varchar(250) not NULL,
 	CONSTRAINT ANAGRAFICA_UTENTE FOREIGN KEY (id_utente) REFERENCES Utente(id_utente) ON DELETE CASCADE,
 	CONSTRAINT UNICA_ANAGRAFICA unique(cf)
 );
 
 create table Pubblicazione (
 	id_pubblicazione 	int AUTO_INCREMENT PRIMARY KEY,
-	titolo		 	varchar(100) not NULL,
+	titolo		 	varchar(250) not NULL,
 	data_inserimento 	TIMESTAMP default CURRENT_TIMESTAMP, 
 	data_ultima_modifica 	TIMESTAMP default CURRENT_TIMESTAMP,
-	categoria 		varchar(100) not NULL,
+	categoria 		varchar(250) not NULL,
 	numlike		 	int default 0,
-	rif_inserimento 	varchar(100) not NULL,
+	rif_inserimento 	varchar(250) not NULL,
 	CONSTRAINT PUBBLICAZIONE_UTENTE FOREIGN KEY (rif_inserimento) REFERENCES Utente(email) 	# decidereondelete
 );
 
@@ -45,25 +45,25 @@ create table Metadati (
 	edizione		int default 1 not NULL,
 	editore			varchar(50),
 	data_pubblicazione 	DATE,
-	parole_chiave		varchar(200),
+	parole_chiave		varchar(250),
 	isbn			BIGINT PRIMARY KEY,
 	num_pagine		int,
 	lingua			varchar(50),
-	sinossi			varchar(1000),
+	sinossi			varchar(500),
 	CONSTRAINT METADATI_PUBBLICAZIONE FOREIGN KEY(id_pubblicazione) REFERENCES Pubblicazione(id_pubblicazione)
 );
 
 create table Autore (
 	id_autore 		int AUTO_INCREMENT PRIMARY KEY,
-	nome 			varchar(100) not NULL,
-	cognome 		varchar(100) not NULL
+	nome 			varchar(250) not NULL,
+	cognome 		varchar(250) not NULL
 );
 
 
 create table Capitolo (
 	id_capitolo		int AUTO_INCREMENT PRIMARY KEY,
 	id_pubblicazione 	int,
-	titolo			varchar(100) not NULL,
+	titolo			varchar(250) not NULL,
 	descrizione		varchar(500),
 	num_capitolo		int,
 	CONSTRAINT CAPITOLO_PUBBLICAZIONE FOREIGN KEY(id_pubblicazione) REFERENCES Pubblicazione(id_pubblicazione),
@@ -81,14 +81,14 @@ create table Versione_Stampa (
 
 create table Mediatype (
 	id_mediatype 		int AUTO_INCREMENT PRIMARY KEY,
-	tipo			varchar(100) not NULL,
-	formato			varchar(100) not NULL
+	tipo			varchar(250) not NULL,
+	formato			varchar(250) not NULL
 );
 
 create table Risorse (
 	id_risorsa 		int AUTO_INCREMENT PRIMARY KEY,
 	id_mediatype		int not NULL,
-	uri			varchar(200) not NULL,
+	uri			varchar(250) not NULL,
 	descrizione		varchar(500),
 	CONSTRAINT RISORSE_MEDIATYPE FOREIGN KEY(id_mediatype) REFERENCES Mediatype(id_mediatype)
 );
@@ -102,7 +102,7 @@ create table Recensione (
 	id_utente		int not NULL,
 	id_pubblicazione 	int not NULL,
 	data 			TIMESTAMP default CURRENT_TIMESTAMP,
-	stato 			varchar(10) not NULL default 'IN ATTESA',
+	stato 			varchar(50) not NULL default 'IN ATTESA',
 	testo 			varchar(1000),
 	CONSTRAINT RECENSIONE_PUBBLICAZIONE FOREIGN KEY(id_pubblicazione) REFERENCES Pubblicazione(id_pubblicazione),
 	CONSTRAINT RECENSIONE_UTENTE FOREIGN KEY (id_utente) REFERENCES Utente(id_utente),
@@ -126,7 +126,7 @@ create table Storico (
 	id_pubblicazione	int not NULL,
 	data			TIMESTAMP default CURRENT_TIMESTAMP,
 	descrizione		varchar(1000) not NULL,
-	operazione 		varchar(100) not NULL,
+	operazione 		varchar(250) not NULL,
 	CONSTRAINT LOG_UTENTE FOREIGN KEY (id_utente) REFERENCES Utente (id_utente),
 	CONSTRAINT LOG_PUBBLICAZIONE FOREIGN KEY (id_pubblicazione) REFERENCES Pubblicazione(id_pubblicazione)
 );
