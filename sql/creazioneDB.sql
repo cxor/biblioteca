@@ -125,8 +125,8 @@ create table Storico (
 	id_utente 		int not NULL,
 	id_pubblicazione	int not NULL,
 	data			TIMESTAMP default CURRENT_TIMESTAMP,
-	descrizione		varchar(100) not NULL,
-	operazione 		varchar(40) not NULL,
+	descrizione		varchar(1000) not NULL,
+	operazione 		varchar(100) not NULL,
 	CONSTRAINT LOG_UTENTE FOREIGN KEY (id_utente) REFERENCES Utente (id_utente),
 	CONSTRAINT LOG_PUBBLICAZIONE FOREIGN KEY (id_pubblicazione) REFERENCES Pubblicazione(id_pubblicazione)
 );

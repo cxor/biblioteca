@@ -124,10 +124,6 @@ create procedure estrazione_pubblicazione_dato_id ( in IDPUBB int)
 
 
 
-
-
-
-
 # OPERAZIONE 9. Inserimento di una recensione relativa a una pubblicazione.
 drop procedure if exists inserimento_recensione ;
 create procedure inserimento_recensione ( in emailutente varchar(100) , in titolopubb varchar(100) ,in TESTO varchar(1000)	)
