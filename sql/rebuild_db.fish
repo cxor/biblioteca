@@ -2,12 +2,13 @@
 #
 # rebuild_db: script to automate the execution of sql scripts.
 
-# Modificare le variabili di ambiente
 
-
-if not set -q is_installed_rebuild_db
+function install_rebuild_db
+	source rebuild_db.fish
 	cp rebuild_db.fish $HOME/.config/fish/functions
-	set -Ux is_installed_rebuild_db 1
+	if set -q is_installed_rebuild_db
+		set -e is_installed_rebuild_db
+	end
 end
 
 
@@ -52,7 +53,7 @@ function rebuild_db
 	for script in $sql_scripts
 		mysql -u $mysql_user --password=$mysql_password $mysql_database < $script
 	end
-	set_color -o green; and echo "Database 'BIBLIOTECA' ricostruito con successo."
+	set_color -o green; and echo "Database $mysql_database ricostruito con successo."
 	return 0
 end
 	
