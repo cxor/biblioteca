@@ -11,6 +11,8 @@ function install_rebuild_db
 	end
 end
 
+# Call install_rebuild_db to maintain the most current version loaded on startup.
+install_rebuild_db
 
 
 function var_switcher_by_host
