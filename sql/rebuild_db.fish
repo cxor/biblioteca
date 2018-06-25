@@ -14,7 +14,6 @@ end
 
 
 function var_switcher_by_host
-	
 	switch $argv[1]
 		case 'cxor'
 			if not set -q mysql_password
@@ -52,6 +51,12 @@ function rebuild_db
 	# fallthrough se non si e' root e se si e' autorizzati ad eseguire gli script sql
 	for script in $sql_scripts
 		mysql -u $mysql_user --password=$mysql_password $mysql_database < $script
+		if [ $status -eq '0' ]
+			set_color -o white; and echo "Script $script eseguito con successo."
+		else
+			set_color -o red; and echo "Attenzione: lo script $script non e' stato eseguito con successo. [ABORT]"
+			return 1
+		end
 	end
 	set_color -o green; and echo "Database $mysql_database ricostruito con successo."
 	return 0
