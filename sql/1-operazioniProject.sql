@@ -206,7 +206,7 @@ delimiter $
 
 							join Attribuzione on Metadati.isbn = Attribuzione.isbn  
 
-							join Autore on Attribuzione.id_autore = Autore.id_autore where Pubblicazione.id_pubblicazione = 1 ;
+							join Autore on Attribuzione.id_autore = Autore.id_autore where Pubblicazione.id_pubblicazione = IDPUBB ;
 
 		end $
 
@@ -547,9 +547,132 @@ delimiter $
 	end $
 	
 
-# OPERAZIONE 18. Data una pubblicazione, restituire tutte le pubblicazioni del catalogo aventi gli stessi autori
+# OPERAZIONE 18. Data una pubblicazione, restituire tutte le pubblicazioni aventi gli stessi autori
+#
+#	Questa query è ambigua , avente gli stessi autori potrebbe significare :
+#
+#			- le pubblicazioni scritte dagli stessi autori e dai sottoinsiemi
+#			
+#			- lepubblicazioni scritte dagli stessi autori più eventuali altri autori
+#	
+#			- le pubblicazione scritte da esattamente gli stessi autori.
+#
+#
 
 
 
 
 
+
+
+
+
+	drop procedure if exists elenco_pubblicazioni_stessi_autori_uno ;
+	create procedure elenco_pubblicazioni_stessi_autori_uno( in id_pubb int )
+
+	begin
+
+		 select distinct p1.titolo , m1.*  from Pubblicazione as p1   
+		 	
+		 	join Metadati as m1 on p1.id_pubblicazione = m1.id_pubblicazione  
+		 	
+		 	join Attribuzione as a1 on m1.isbn = a1.isbn    
+		 	
+		 	join Autore  as au1 on a1.id_autore = au1.id_autore     
+		 	
+		 	join (
+		 	
+		 		    select p2.titolo , au2.cognome from Pubblicazione as p2  
+		 	
+		 		    	join Metadati as m2 on p2.id_pubblicazione = m2.id_pubblicazione   
+		 	
+		 		    	join Attribuzione as a2 on m2.isbn = a2.isbn   
+		 	
+		 		    	join Autore as au2 on a2.id_autore = au2.id_autore  
+		 	
+		 		    		where p2.id_pubblicazione = id_pubb   
+		 		  
+		 		  ) as jjj;
+
+	end $
+
+
+	drop procedure if exists elenco_pubblicazioni_stessi_autori_due ;
+	create procedure elenco_pubblicazioni_stessi_autori_due( in id_pubb int )
+
+	begin
+			
+			select m1.* , au1.* from Pubblicazione as p1 
+				
+				join Metadati as m1 on p1.id_pubblicazione = m1.id_pubblicazione  
+				
+				join Attribuzione as a1 on m1.isbn = a1.isbn  
+				
+				join Autore  as au1 on a1.id_autore = au1.id_autore   
+		
+				join (
+				
+					#ritorno la lista di autori della pubb
+		
+					select p2.titolo , au2.cognome from Pubblicazione as p2  
+			
+						join Metadati as m2 on p2.id_pubblicazione = m2.id_pubblicazione 
+			
+						join Attribuzione as a2 on m2.isbn = a2.isbn 
+			
+						join Autore as au2 on a2.id_autore = au2.id_autore
+				
+						where p2.id_pubblicazione = id_pubb
+			
+				 ) as jjj 
+		
+					where au1.cognome = jjj.cognome and p1.id_pubblicazione <> id_pubb group by p1.titolo having count(*) = 
+					(
+						# ritorna il numero di autori della pubblicazione
+						
+						select count(*)  from Pubblicazione as p2 join Metadati as m2 on p2.id_pubblicazione = m2.id_pubblicazione 
+		
+							join Attribuzione as a2 on m2.isbn = a2.isbn  
+		
+							join Autore as au2 on a2.id_autore = au2.id_autore
+		
+							where p2.id_pubblicazione = id_pubb group by p2.id_pubblicazione 
+					) ;
+
+	end $
+
+
+
+	drop procedure if exists elenco_pubblicazioni_stessi_autori_tre ;
+	create procedure elenco_pubblicazioni_stessi_autori_tre( in id_pubb int )
+
+	begin
+
+		select Pubblicazione.titolo , Metadati.isbn , GROUP_CONCAT( concat (Autore.nome , ' ', Autore.cognome) separator ' , ') as Autori from  Pubblicazione
+
+    						join Metadati on Pubblicazione.id_pubblicazione = Metadati.id_pubblicazione  
+
+							join Attribuzione on Metadati.isbn = Attribuzione.isbn  
+
+							join Autore on Attribuzione.id_autore = Autore.id_autore where Autori = 
+							(
+								select GROUP_CONCAT( concat (Autore.nome , ' ', Autore.cognome) separator ' , ') as Autori from  Pubblicazione as p2
+
+    								join Metadati on Pubblicazione.id_pubblicazione = Metadati.id_pubblicazione  
+
+									join Attribuzione on Metadati.isbn = Attribuzione.isbn  	
+	
+									join Autore on Attribuzione.id_autore = Autore.id_autore where p2 = id_pubb
+													
+							) ;
+
+
+	end $
+
+
+
+
+
+# reimposto il delimiter
+
+delimiter ;

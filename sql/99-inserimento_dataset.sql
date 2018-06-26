@@ -49,12 +49,13 @@ call aggiungi_pubblicazione ('titolo9','categ9', 'pippo@gmail.com');
 
 DELETE FROM Metadati;
 						
-call aggiungi_metadati(1, 2 ,'editore1','1800-01-01' ,'par1 par2 par3' ,1234567890123 ,987 ,'italiana' ,'asbstract pubblicazione1' );
-call aggiungi_metadati(2, 1 ,'editore2','1800-01-01' ,'par1 par2 par3' ,1234567890124 ,987 ,'italiana' ,'asbstract pubblicazione2' );
-call aggiungi_metadati(3, 1 ,'editore3','1800-01-01' ,'par1 par2 par3' ,1234567890125 ,987 ,'italiana' ,'asbstract pubblicazione3' );
-call aggiungi_metadati(4, 1 ,'editore4','1800-01-01' ,'par1 par2 par3' ,1234567890126 ,987 ,'italiana' ,'asbstract pubblicazione4' );
-call aggiungi_metadati(5, 1 ,'editore5','1800-01-01' ,'par1 par2 par3' ,1234567890127 ,987 ,'italiana' ,'asbstract pubblicazione5' );
-call aggiungi_metadati(6, 1 ,'editore6','1800-01-01' ,'par1 par2 par3' ,1234567890128 ,987 ,'italiana' ,'asbstract pubblicazione6' );
+#ins   dati value (IDPUBB, EDIZIONE ,EDITORE,DATAPUBB ,PAROLECHIAVE ,ISBN ,NUMPAGINE ,LINGUA ,SINOSSI);						
+call aggiungi_metadati(1, 2 ,'editore1','1800-01-01' ,'par1 par2 par3' ,1 ,987 ,'italiana' ,'asbstract pubblicazione1' );
+call aggiungi_metadati(2, 1 ,'editore2','1800-01-01' ,'par1 par2 par3' ,2 ,987 ,'italiana' ,'asbstract pubblicazione2' );
+call aggiungi_metadati(3, 1 ,'editore3','1800-01-01' ,'par1 par2 par3' ,3 ,987 ,'italiana' ,'asbstract pubblicazione3' );
+call aggiungi_metadati(4, 1 ,'editore4','1800-01-01' ,'par1 par2 par3' ,4 ,987 ,'italiana' ,'asbstract pubblicazione4' );
+call aggiungi_metadati(5, 1 ,'editore5','1800-01-01' ,'par1 par2 par3' ,5 ,987 ,'italiana' ,'asbstract pubblicazione5' );
+call aggiungi_metadati(6, 1 ,'editore6','1800-01-01' ,'par1 par2 par3' ,6 ,987 ,'italiana' ,'asbstract pubblicazione6' );
 
 
 #aggiunti autori
@@ -108,12 +109,12 @@ call aggiungi_capitolo(8,'tit','desc1',1);
 call aggiungi_capitolo(9,'tit','desc1',1);
 
 
-call aggiungi_versione_stampa(1234567890123, 1, '1987-7-13');
-call aggiungi_versione_stampa(1234567890124, 1, '1961-2-28');
-call aggiungi_versione_stampa(1234567890125, 1, '1954-5-3');
-call aggiungi_versione_stampa(1234567890126, 1, '2015-6-16');
-call aggiungi_versione_stampa(1234567890127, 1, '1959-4-26');
-call aggiungi_versione_stampa(1234567890128, 1, '1968-5-12');
+call aggiungi_versione_stampa(1, 1, '1987-7-13');
+call aggiungi_versione_stampa(2, 1, '1961-2-28');
+call aggiungi_versione_stampa(3, 1, '1954-5-3');
+call aggiungi_versione_stampa(4, 1, '2015-6-16');
+call aggiungi_versione_stampa(5, 1, '1959-4-26');
+call aggiungi_versione_stampa(6, 1, '1968-5-12');
 
 
 call aggiungi_mediatype('tipo1','formato1');
@@ -174,17 +175,17 @@ call aggiungi_gradimento(4 , 4);
 
 
 
-call aggiungi_attribuzione(1234567890123 , 1);
-call aggiungi_attribuzione(1234567890123 , 2);
-call aggiungi_attribuzione(1234567890123 , 3);
-call aggiungi_attribuzione(1234567890123 , 4);
-call aggiungi_attribuzione(1234567890124 , 1);
-call aggiungi_attribuzione(1234567890124 , 2);
-call aggiungi_attribuzione(1234567890124 , 3);
-call aggiungi_attribuzione(1234567890125 , 1);
-call aggiungi_attribuzione(1234567890125 , 2);
-call aggiungi_attribuzione(1234567890126 , 5);
-call aggiungi_attribuzione(1234567890126 , 8);
+call aggiungi_attribuzione(1 , 1);
+call aggiungi_attribuzione(1 , 2);
+call aggiungi_attribuzione(1 , 3);
+call aggiungi_attribuzione(1 , 4);
+call aggiungi_attribuzione(2 , 1);
+call aggiungi_attribuzione(2 , 2);
+call aggiungi_attribuzione(2 , 3);
+call aggiungi_attribuzione(3 , 1);
+call aggiungi_attribuzione(3 , 2);
+call aggiungi_attribuzione(4 , 1);
+call aggiungi_attribuzione(4 , 2);
 
 
 
