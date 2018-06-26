@@ -4,7 +4,6 @@
 
 
 function install_rebuild_db
-	source rebuild_db.fish
 	cp rebuild_db.fish $HOME/.config/fish/functions
 	if set -q is_installed_rebuild_db
 		set -e is_installed_rebuild_db
@@ -56,7 +55,7 @@ function rebuild_db
 		if [ $status -eq '0' ]
 			set_color -o white; and echo "Script $script eseguito con successo."
 		else
-			set_color -o red; and echo "Attenzione: lo script $script non e' stato eseguito con successo. [ABORT]"
+			set_color -o red; and echo "Attenzione: l'esecuzione dello script $script ha riportato degli errori. [ABORT]"
 			return 1
 		end
 	end
