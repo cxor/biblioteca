@@ -40,10 +40,8 @@ create table Pubblicazione (
 	data_inserimento 		TIMESTAMP 		default CURRENT_TIMESTAMP, 
 	data_ultima_modifica 	TIMESTAMP 		default CURRENT_TIMESTAMP,
 	categoria 				varchar(250) 	not NULL,
-	numlike		 			int 			default 0,
-	rif_inserimento 		varchar(50) 	not NULL,
+	numlike		 			int 			default 0
 	
-	CONSTRAINT PUBBLICAZIONE_UTENTE FOREIGN KEY (rif_inserimento) REFERENCES Utente(email) 	# decidereondelete
 );
 
 create table Metadati (
@@ -148,7 +146,7 @@ create table Storico (
 	id_pubblicazione		int not NULL,
 	data					TIMESTAMP default CURRENT_TIMESTAMP,
 	descrizione				varchar(1000) not NULL,
-	operazione 				varchar(250) not NULL,
+	operazione 				varchar(50) not NULL,
 
 	CONSTRAINT LOG_UTENTE FOREIGN KEY (id_utente) REFERENCES Utente (id_utente),
 	CONSTRAINT LOG_PUBBLICAZIONE FOREIGN KEY (id_pubblicazione) REFERENCES Pubblicazione(id_pubblicazione)

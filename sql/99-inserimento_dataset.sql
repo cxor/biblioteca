@@ -33,15 +33,15 @@ call aggiungi_anagrafica(10,'tre','disalle'    ,'mxmxmx89i13j390p'  ,'1994-04-26
 
 DELETE FROM Pubblicazione;
 
-call aggiungi_pubblicazione ('titolo1','categ1', 'tommasodisalle@gmail.com');
-call aggiungi_pubblicazione ('titolo2','categ2', 'tommasodisalle@gmail.com');
-call aggiungi_pubblicazione ('titolo3','categ3', 'tommasodisalle@gmail.com');
-call aggiungi_pubblicazione ('titolo4','categ4', 'danielecampli@gmail.com');
-call aggiungi_pubblicazione ('titolo5','categ5', 'danielecampli@gmail.com');
-call aggiungi_pubblicazione ('titolo6','categ6', 'danielecampli@gmail.com');
-call aggiungi_pubblicazione ('titolo7','categ7', 'danielecampli@gmail.com');
-call aggiungi_pubblicazione ('titolo8','categ8', 'pippo@gmail.com');
-call aggiungi_pubblicazione ('titolo9','categ9', 'pippo@gmail.com');
+call aggiungi_pubblicazione ('titolo1','categ1');
+call aggiungi_pubblicazione ('titolo2','categ2');
+call aggiungi_pubblicazione ('titolo3','categ3');
+call aggiungi_pubblicazione ('titolo4','categ4');
+call aggiungi_pubblicazione ('titolo5','categ5');
+call aggiungi_pubblicazione ('titolo6','categ6');
+call aggiungi_pubblicazione ('titolo7','categ7');
+call aggiungi_pubblicazione ('titolo8','categ8');
+call aggiungi_pubblicazione ('titolo9','categ9');
 
 
 

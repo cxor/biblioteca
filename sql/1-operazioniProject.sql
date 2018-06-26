@@ -15,41 +15,21 @@ delimiter $
 			
 				DECLARE err CONDITION FOR SQLSTATE '45000' ;
 			
-			
-				declare all_ok BOOLEAN ;  
-
-				declare CONTINUE HANDLER FOR SQLEXCEPTION set all_ok = false;	
-	
-				set all_ok = true;
-	
-			
 				if ( check_tipo_utente(email_utente_richiedente) <> 0 )
 					then
-			
+						
 						call aggiorna_tipo_utente ( email_utente );
 			
 					else
 							
 						SIGNAL err SET MESSAGE_TEXT = 'non si dispongono dei privilegi necessari per effettuare questa operazione ';				
-						
 				
 				end if ;
 				
-				if not all_ok 
-
-					then
-
-						ROLLBACK ;
-
-				else 
-					
-					COMMIT ;
-
-				end if ;
+				
 
 			end $
-		
-		
+			
 		
 		drop procedure if exists aggiorna_tipo_utente ; 
 		create procedure aggiorna_tipo_utente (in email_utente varchar(250) )
@@ -153,7 +133,7 @@ delimiter $
 	
 		BEGIN
 		
-			select * from Pubblicazione where rif_inserimento = emailutente ;
+			select * from Pubblicazione join Storico where Storico.id_utente  = get_id_utente(emailutente) AND operazione ='INSERIMENTO PUBBLICAZIONE';
 		
 		end $
 
