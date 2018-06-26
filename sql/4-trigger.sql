@@ -22,8 +22,8 @@ create trigger storico_trg
 
 		
 	if strcmp (NEW.operazione ,'INSERIMENTO PUBBLICAZIONE') <> 0
-	
-	OR strcmp (NEW.operazione ,'CANCELLAZIONE PUBBLICAZIONE') <> 0 then signal sqlstate '45000' set message_text='Il marcatore non appartiene alle formazioni in gioco';
+
+OR strcmp (NEW.operazione ,'CANCELLAZIONE PUBBLICAZIONE') <> 0 then signal sqlstate '45000' set message_text='Il marcatore non appartiene alle formazioni in gioco';
 	
 	
 	end if ;
