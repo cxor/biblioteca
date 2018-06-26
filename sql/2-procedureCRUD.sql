@@ -239,13 +239,13 @@ drop procedure if exists  aggiungi_pubblicazione ;
 create procedure aggiungi_pubblicazione 
 	(
 		in TITOLO varchar(250) ,
-		in CATEG  varchar(250) ,
-		in RIF 	  varchar(250)
+		in CATEG  varchar(250) 
+		
 	)
 	
 	begin
 	
-		insert into Pubblicazione (titolo, categoria , rif_inserimento ) value ( TITOLO , CATEG , RIF );
+		insert into Pubblicazione (titolo, categoria  ) value ( TITOLO , CATEG );
 	
 	end $
 

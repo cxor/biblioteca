@@ -57,7 +57,6 @@ create procedure inserisci_pubblicazione
 		(
 			in _titolo_pubb 		varchar(250) ,
 			in _categoria 			varchar(250) ,
-			in _email_utente 		varchar(250) ,
 			in _edizione			int			 ,
 			in _editore				varchar(250) ,
 			in _data_pubblicazione	DATE		 ,
@@ -79,7 +78,7 @@ create procedure inserisci_pubblicazione
 
 				START TRANSACTION;
 
-				call aggiungi_pubblicazione(_titolo_pubb , _categoria , _email_utente );
+				call aggiungi_pubblicazione(_titolo_pubb , _categoria  );
 					
 				set idpubb = last_insert_id();
 	
