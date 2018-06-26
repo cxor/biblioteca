@@ -1,3 +1,3 @@
-# Biblioteca
+# BibliotecAQ
 Progetto di Laboratorio di Basi di Dati, 2018
-![alt text] (biblioteca/doc/relazione_finale/img/BibliotecAQ_OpaqueBG.png)
+![bibliotecAQ logo] (https://github.com/cxor/biblioteca/blob/master/doc/relazione_finale/img/BibliotecAQ_OpaqueBG.png)
