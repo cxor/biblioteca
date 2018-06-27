@@ -105,6 +105,17 @@ create procedure aggiorna_tipo( in EMAILUTENTE varchar(250) , in TIPO varchar(25
 
 
 
+drop procedure if exists  aggiorna_num_pubblicazione ;
+create procedure aggiorna_num_pubblicazione( in EMAILUTENTE varchar(250) )
+
+	begin 
+
+		update Utente set num_inserimenti = num_inserimenti+ 1 where email = EMAILUTENTE ;
+
+	end $
+
+
+
 
 #
 #	procedure CRUD ANAGRAFICA
@@ -796,7 +807,7 @@ create procedure cancella_recensione (in IDUTENTE int , in IDPUBB int)
 	begin
 
 		delete from Recensione where id_utente = IDUTENTE and id_pubblicazione = IDPUBB ;
-
+		
 	end $
 
 
@@ -843,7 +854,7 @@ create procedure aggiungi_gradimento ( in IDUTENTE int , in IDPUBB int )
 
 	begin
 
-		insert into Gradimento  ( id_utente , id_pubblicazione )value (IDUTENTE , IDPUBB );
+		insert into Gradimento  ( id_utente , id_pubblicazione ) value (IDUTENTE , IDPUBB );
 
 	end $
 
@@ -930,7 +941,7 @@ create procedure cancella_link (in IDPUBB int , in IDRIS int )
 #procedure STORICO
 #
 drop procedure if exists  aggiungi_storico ;
-create procedure aggiungi_storico ( in idut int , in idpubb int , in descr varchar(1000) , in oper varchar(40) )
+create procedure aggiungi_storico ( in idut int , in idpubb int , in descr varchar(1000) , in oper varchar(50) )
 	
 	begin
 	

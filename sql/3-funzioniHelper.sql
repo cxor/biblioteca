@@ -26,7 +26,15 @@ create function check_tipo_utente ( email_utente varchar(100) ) returns integer
 		end $
 
 
+drop function if exists check_tipo_id_utente ;
+create function check_tipo_id_utente ( idUtente int ) returns integer
+		READS SQL DATA
 
+		begin
+		
+			return (select if ( (select tipo from Utente where id_utente = idUtente) = 'ATTIVO', 1 , 0 ) ) ;
+		
+		end $
 
 
 
@@ -81,15 +89,13 @@ create function get_id_utente( emailutente varchar(100) ) returns integer
 
 #funzione che recupera la mail di chi ha inserito un metadato
 
-drop function if exists get_email_by_isbn ;
-create function get_email_by_isbn ( var_isbn bigint ) returns varchar(100)
+drop function if exists get_email_by_id ;
+create function get_email_by_id ( var_id bigint ) returns varchar(100)
 		READS SQL DATA
 
 		begin
 
-			return ( select Pubblicazione.rif_inserimento	From Pubblicazione 
-															join Metadati on Pubblicazione.id_pubblicazione = Metadati.id_pubblicazione 
-															where Metadati.isbn = var_isbn  );	
+			return ( select email From Utente where  id_utente = var_id );	
 	
 		end $
 

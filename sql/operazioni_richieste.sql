@@ -6,7 +6,7 @@ delimiter $
 #		_1)	operazione_permessi -> si occupa di controllare se l utente che la chiama è attivo e di chiamare aggiorna_tipo_utente			
 #		_2)	aggiorna_tipo_utente -> effettua l upgrade/downgrade (modifica del tipo) dell utente
 #			
-# ometto volutamente i controlli sull email se non esiste la mail la query la fallisce
+# ometto volutamente i controlli sull email se non esiste la mail la query la fallisce per il vincolo referenziale
 # e non effettuo il check sul tipo attivo , permetto il downgrade
 		
 		drop procedure if exists operazione_permessi ;
@@ -179,10 +179,9 @@ delimiter $
 # OPERAZIONE 8. Ricerca di pubblicazioni per ISBN, titolo, autore, e parole chiave.
 #
 #			Non posso effettuare le ricerche _in un unica query ISBN è un BIGINT,tutti gl altri sono _varchar
-#
 #			Splitto la query _in _2
 #					_1) per la ricerca tramite isbn 
-#					_2) per tutte le altre
+#					_2) per tutte le altre passando come parametro il tipo di query desiderata [TITOLO , AUTORE , PAROLECHIAVE ]
 #
 
 
@@ -193,7 +192,7 @@ delimiter $
 		
 		begin
 		
-				select * from Pubblicazione
+				select Pubblicazione.titolo from Pubblicazione
 							
 							join Metadati on Pubblicazione.id_pubblicazione = Metadati.id_pubblicazione
 				
@@ -239,7 +238,7 @@ delimiter $
 				
 						#effettua la ricerca per parole chiave
 				
-						select Pubblicazione.titolo , Metadati.isbn from Pubblicazione 
+						select Pubblicazione.titolo  from Pubblicazione 
 						
 								join Metadati on Pubblicazione.id_pubblicazione = Metadati.id_pubblicazione 
 								
@@ -258,34 +257,32 @@ delimiter $
 
 
 # OPERAZIONE 9. Inserimento di una recensione relativa a una pubblicazione.
-#					Questa operazione è permessa solo a utenti attivi
+#					
 #
 
 
 
 		drop procedure if exists inserimento_recensione ;
-		create procedure inserimento_recensione ( in emailutente varchar(250) , in titolopubb varchar(250) ,in TESTO varchar(1000)	)
-
+		create procedure inserimento_recensione ( in emailutente varchar(250) , in id_pubb int ,in TESTO varchar(1000)	)
+		
 		BEGIN
-
-			DECLARE err CONDITION FOR SQLSTATE '45000' ;
-
-			if ( select check_tipo_utente(emailutente) <> 0 )
-
-					then
-			
-					
-						call aggiungi_recensione(get_id_utente(emailutente) , get_id_pubblicazione(titolopubb) , TESTO );	
-			
-					else
-							
-						SIGNAL err SET MESSAGE_TEXT = 'non si dispongono dei privilegi necessari per effettuare questa operazione ';				
-						
-				
-				end if ;			
-
+			DECLARE all_ok BOOLEAN;
+			DECLARE var_descrizione varchar(100);
+			DECLARE CONTINUE HANDLER FOR SQLEXCEPTION set all_ok = true;
+		
+			START TRANSACTION;
+			set var_descrizione = concat(' l utente ',emailutente,' ha inserito una recensione');
+			call aggiungi_recensione(get_id_utente(emailutente) , id_pubb, TESTO );	
+			call aggiungi_storico( get_id_utente( emailutente ) , id_pubb , var_descrizione ,'INSERIMENTO RECENSIONE');
+		
+			if NOT all_ok 
+			THEN
+				ROLLBACK;
+			ELSE 
+				COMMIT;
+			end if;	
+		
 		end $
-
 
 
 
@@ -298,28 +295,51 @@ delimiter $
 #
 
 		drop procedure if exists approva_recensione ;
-		create procedure approva_recensione( in IDPUBB int , in IDUTENTE int , in emailutente varchar(250) )
+		create procedure approva_recensione( in IDUTENTE int , in IDPUBB int , in emailutente varchar(250) )
 
 		BEGIN	
 
-			DECLARE err CONDITION FOR SQLSTATE '45000' ;
 
-			if ( check_tipo_utente(emailutente) <> 0 )
 
-				then
-	
-				call aggiorna_stato_recensione( IDPUBB , IDUTENTE );	
+			DECLARE all_ok BOOLEAN;
 
-# -- procedura crud -> update Recensione set stato = 'APPROVATA' where id_utente = IDUTENTE and id_pubblicazione = IDPUBB ;
+			DECLARE var_descrizione varchar(250);
 
+			DECLARE CONTINUE HANDLER FOR SQLEXCEPTION set all_ok = true;
+						
+			if ( check_tipo_utente( emailutente ) <> 0 )
+			
+				then		
+			
+					START TRANSACTION;
+			
+					call aggiorna_stato_recensione( IDUTENTE , IDPUBB );	
+
+					set var_descrizione = CONCAT('l utente attivo ', emailutente ,' ha approvato la recensione di ', get_email_by_id(IDUTENTE) );
+		
+					call aggiungi_storico( get_id_utente( emailutente ) , IDPUBB , var_descrizione ,'MODIFICA RECENSIONE');
+				
+					if NOT all_ok 
+						
+						THEN
+							
+								ROLLBACK;
+						ELSE 
+							
+							COMMIT;
+
+					end if;	
+				
 			else
 							
-				SIGNAL err SET MESSAGE_TEXT = 'non si dispongono dei privilegi necessari per effettuare questa operazione ';				
+				select 'non si dispongono dei privilegi necessari per effettuare questa operazione ' as Errore;				
 					
 			end if ;	
 	
+				
+						
 	
-		
+	
 		end $	
 
 
@@ -341,49 +361,28 @@ delimiter $
 	
 		BEGIN
 	
-			DECLARE IDUTENTE int ;
-	
 			DECLARE all_ok BOOLEAN;
-
-			DECLARE err CONDITION FOR SQLSTATE '45000' ;
 
 			DECLARE CONTINUE HANDLER FOR SQLEXCEPTION set all_ok = false;
 
-		
+			set all_ok = true;
 
-				if ( check_tipo_utente(emailutente) <> 0 )
+			START TRANSACTION;
+	
+			call aggiungi_gradimento( get_id_utente ( emailutente ) , IDPUBB );
 
-					then
-		
-						set all_ok = true;
+			call aggiungi_uno_a_like( IDPUBB ) ;
+			
+			call aggiungi_storico( get_id_utente ( emailutente ) , IDPUBB , 'l utente ha inserito un like' ,'INSERIMENTO LIKE');
 
-						START TRANSACTION;
-		
-						set IDUTENTE = get_id_utente ( emailutente );
+			if NOT all_ok 	
+				THEN
+					ROLLBACK;
+				ELSE 	
+					COMMIT;
+			end if;				
+		end $
 
-						call aggiungi_gradimento( IDUTENTE , IDPUBB );
-
-						call aggiungi_uno_a_like(IDPUBB) ;
-
-						if NOT all_ok 
-						
-							THEN
-							
-							ROLLBACK;
-
-						ELSE 
-							
-							COMMIT;
-
-						end if;		
-
-					else
-								
-						SIGNAL err SET MESSAGE_TEXT = 'non si dispongono dei privilegi necessari per effettuare questa operazione ';				
-						
-				end if ;
-
-			end $
 
 
 #HANDLER PER OPERAZIONE 11
@@ -392,7 +391,7 @@ delimiter $
 	
 		BEGIN
 	
-			update Pubblicazione set numlike = numlike +1  where id_pubblicazione = IDPUBB ;
+			update Pubblicazione set numlike = numlike + 1  where id_pubblicazione = IDPUBB ;
 		
 		end $
 
@@ -425,7 +424,7 @@ delimiter $
 	
 		BEGIN
 		
-			select * ,get_email_by_id(id_utente ) as email from Recensione where id_pubblicazione = IDPUBB and stato = 'APPROVATA';
+			select get_email_by_id(id_utente ) as email , data , testo from Recensione where id_pubblicazione = IDPUBB and stato = 'APPROVATA';
 	
 		end $
 

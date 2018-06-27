@@ -54,7 +54,8 @@ create procedure registrazione
 
 drop procedure if exists inserisci_pubblicazione ;
 create procedure inserisci_pubblicazione 
-		(
+		( 
+			in _email				varchar(250) ,
 			in _titolo_pubb 		varchar(250) ,
 			in _categoria 			varchar(250) ,
 			in _edizione			int			 ,
@@ -70,6 +71,8 @@ create procedure inserisci_pubblicazione
 				
 				declare all_ok BOOLEAN ;  
 				
+				declare _id_utente int ;
+				
 				declare idpubb int ;
 				
 				declare CONTINUE HANDLER FOR SQLEXCEPTION set all_ok = false;	
@@ -78,8 +81,17 @@ create procedure inserisci_pubblicazione
 
 				START TRANSACTION;
 
+				set _id_utente = get_id_utente(_email) ;
+				
 				call aggiungi_pubblicazione(_titolo_pubb , _categoria  );
 					
+					
+				#( in idut int , in idpubb int , in descr varchar(1000) , in oper varchar(50) )
+				
+				call aggiungi_storico(_id_utente , idpubb ,'l utente ha inserito una pubblicazione' ,'INSERIMENTO');
+				
+				call aggiorna_num_pubblicazione (_email );
+				
 				set idpubb = last_insert_id();
 	
 				call aggiungi_metadati ( idpubb , _edizione , _editore , _data_pubblicazione , _parole_chiave ,_isbn , _numPagine , _lingua , _sinossi);
@@ -287,6 +299,10 @@ create procedure inserimento_capitolo  (	varpubb int , vartitolo varchar(250) , 
 			end if ;
 
 	end $
+
+
+
+
 
 #
 # Reimposto il delimitatore

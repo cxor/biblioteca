@@ -32,7 +32,6 @@ call aggiungi_anagrafica(10,'tre','disalle'    ,'mxmxmx89i13j390p'  ,'1994-04-26
 #aggiunta Pubblicazioni
 
 DELETE FROM Pubblicazione;
-
 call aggiungi_pubblicazione ('titolo1','categ1');
 call aggiungi_pubblicazione ('titolo2','categ2');
 call aggiungi_pubblicazione ('titolo3','categ3');
@@ -48,7 +47,6 @@ call aggiungi_pubblicazione ('titolo9','categ9');
 #aggiunta metadati
 
 DELETE FROM Metadati;
-						
 #ins   dati value (IDPUBB, EDIZIONE ,EDITORE,DATAPUBB ,PAROLECHIAVE ,ISBN ,NUMPAGINE ,LINGUA ,SINOSSI);						
 call aggiungi_metadati(1, 2 ,'editore1','1800-01-01' ,'par1 par2 par3' ,1 ,987 ,'italiana' ,'asbstract pubblicazione1' );
 call aggiungi_metadati(2, 1 ,'editore2','1800-01-01' ,'par1 par2 par3' ,2 ,987 ,'italiana' ,'asbstract pubblicazione2' );
@@ -59,7 +57,6 @@ call aggiungi_metadati(6, 1 ,'editore6','1800-01-01' ,'par1 par2 par3' ,6 ,987 ,
 
 
 #aggiunti autori
-
 CALL aggiungi_autore('aaa','zzz');
 CALL aggiungi_autore('bbb','xxx');
 CALL aggiungi_autore('ccc','yyy');
@@ -75,7 +72,6 @@ CALL aggiungi_autore('nnn','gfd');
 CALL aggiungi_autore('ooo','ghj');
 CALL aggiungi_autore('tommaso','di salle');
 CALL aggiungi_autore('daniele','campli');
-
 
 call aggiungi_capitolo(1,'tit','desc1',1);
 call aggiungi_capitolo(1,'tit','desc2',2);
@@ -107,7 +103,6 @@ call aggiungi_capitolo(6,'tit','desc1',1);
 call aggiungi_capitolo(7,'tit','desc1',1);
 call aggiungi_capitolo(8,'tit','desc1',1);
 call aggiungi_capitolo(9,'tit','desc1',1);
-
 
 call aggiungi_versione_stampa(1, 1, '1987-7-13');
 call aggiungi_versione_stampa(2, 1, '1961-2-28');
@@ -188,7 +183,11 @@ call aggiungi_attribuzione(4 , 1);
 call aggiungi_attribuzione(4 , 2);
 
 
-
+call aggiungi_storico(1,1,'inserita pubblicazione' , 'INSERIMENTO PUBBLICAZIONE');
+call aggiungi_storico(1,2,'inserita pubblicazione' , 'INSERIMENTO PUBBLICAZIONE');
+call aggiungi_storico(2,3,'inserita pubblicazione' , 'INSERIMENTO PUBBLICAZIONE');
+call aggiungi_storico(2,4,'inserita pubblicazione' , 'INSERIMENTO PUBBLICAZIONE');
+call aggiungi_storico(3,5,'inserita pubblicazione' , 'INSERIMENTO PUBBLICAZIONE');
 
 call aggiungi_link( 1 ,1 );
 call aggiungi_link( 1, 2);

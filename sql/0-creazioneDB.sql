@@ -56,6 +56,7 @@ create table Metadati (
 	lingua					varchar(50),
 	sinossi					varchar(500),
 	
+	CONSTRAINT UNICO_EDIZIONE UNIQUE (edizione ,id_pubblicazione ),
 	CONSTRAINT METADATI_PUBBLICAZIONE FOREIGN KEY(id_pubblicazione) REFERENCES Pubblicazione(id_pubblicazione)
 );
 
@@ -64,6 +65,8 @@ create table Autore (
 	id_autore 				int AUTO_INCREMENT PRIMARY KEY,
 	nome 					varchar(250) not NULL,
 	cognome 				varchar(250) not NULL
+	
+	CONSTRAINT UNICO_AUTORE UNIQUE (nome ,cognome ),
 );
 
 
@@ -126,7 +129,7 @@ create table Recensione (
 );
 	
 	
-# La tabella sottostante Gradimento corrisponde alla tabella Like, tuttavia MySQL non permette di utilizzare
+# La tabella sottostante Gradimento corrisponde alla tabella Like, tuttavia MySQL non permette di utilizzare like (keyword riservata )
 
 create table Gradimento (
 
