@@ -206,39 +206,75 @@ delimiter $
 # Utilizzo degli if per filtrare il tipo di ricerca e poi eseguo le query con la keyword _LIKE. Così anche se incomplete la ricerca produrrà come risultato
 # le pubblicazioni che conterrano la var_search
 #
+/*
+
+drop procedure if exists ricerca ;
+		create procedure ricerca ( in var_titolo varchar(250) , in var_autori varchar(20),in var_isbn int , in var_parolechiave varchar(20))
+select * from view_pubblicazione_autori 
+		
+			where Autori LIKE CONCAT('%', var_autori , '%') 
+		
+			OR titolo LIKE CONCAT('%', var_titolo, '%') 
+		 
+		 	OR parole_chiave LIKE CONCAT('%', var_parolechiave , '%') 
+		 	
+		 	OR isbn LIKE CONCAT('%', var_isbn , '%') ;
+
+end
+
+
+
+
+*/
+
 
 		drop procedure if exists ricerca ;
-		create procedure ricerca ( in var_search varchar(50), in var_isbn  BIGINT , in var_autori varchar(50) , in var_titolo varchar(50) )
+		create procedure ricerca ( in var_search varchar(250) , var_tipo varchar(20))
 
 		BEGIN
 		
+				DECLARE err CONDITION FOR SQLSTATE '45000' ;
 		
-		select * from view_pubblicazione_autori 
-		
-			where Autori LIKE CONCAT('%', var_autori , '%')  OR Autori LIKE CONCAT('%', var_autori , '%') ;
-		
-			OR titolo LIKE CONCAT('%', var_titolo , '%') ;
-		 
-		 	OR parole_chiave LIKE CONCAT('%', var_search , '%') 
-		 	
-		 	OR isbn LIKE CONCAT('%', var_isbn , '%') ;
-		
+				if strcmp( var_tipo , 'TITOLO') = 0
 				
+				then
+				
+						select titolo From Pubblicazione where titolo LIKE CONCAT('%', var_search , '%') ;
+				
+				elseif  strcmp( var_tipo , 'AUTORE') = 0 then
+				
+						#effettua la ricerca per autore
+				
+						select Pubblicazione.titolo , Metadati.isbn ,Autore.nome , Autore.cognome from Pubblicazione 
+							
+								join Metadati on Pubblicazione.id_pubblicazione = Metadati.id_pubblicazione
+								
+								join Attribuzione on Metadati.isbn = Attribuzione.isbn
+								
+								join Autore on Attribuzione.id_autore = Autore.id_autore
+								
+								where Autore.nome LIKE CONCAT('%', var_search , '%')  OR Autore.cognome LIKE CONCAT('%', var_search , '%') ;
+														
+				elseif 	strcmp( var_tipo , 'PAROLECHIAVE') = 0 then
+				
+						#effettua la ricerca per parole chiave
+				
+						select Pubblicazione.titolo  from Pubblicazione 
+						
+								join Metadati on Pubblicazione.id_pubblicazione = Metadati.id_pubblicazione 
+								
+								where Metadati.parole_chiave LIKE CONCAT('%', var_search , '%') ;
+
+				else
+						#errore_ricerca nel caso il parametro non si _in [ TITOLO , AUTORE , PAROLECHIAVE ]
+
+						SIGNAL err SET MESSAGE_TEXT = 'errore ricerca , parametro di filtraggio non riconosciuto ';
+
+				end if ;	
 		end $
 
 
 
-
-
-select * from view_pubblicazione_autori 
-		
-			where Autore.nome LIKE CONCAT('%', 123 , '%')  OR Autore.cognome LIKE CONCAT('%', 123 , '%') 
-		
-			OR titolo LIKE CONCAT('%', 123 , '%') 
-		 
-		 	OR Metadati.parole_chiave LIKE CONCAT('%', 123 , '%') 
-		 	
-		 	OR Metadati.isbn LIKE CONCAT('%', 123 , '%') ;
 
 
 # OPERAZIONE 9. Inserimento di una recensione relativa a una pubblicazione.
@@ -452,7 +488,7 @@ select * from view_pubblicazione_autori
 
 
 
-# OPERAZIONE 15. Estrazione log_ delle modifiche effettuare su una pubblicazione.
+# OPERAZIONE 15. Estrazione log_ delle modifiche effettuate su una pubblicazione.
 
 		drop procedure if exists log_modifiche;
 		create procedure modifica_log(in id_pubb int)
@@ -505,7 +541,6 @@ select * from view_pubblicazione_autori
 
 		select * from view_pubblicazione_autori 
 			where Autori = ( select Autori from view_pubblicazione_autori where id_pubblicazione =id_pubb ) and id_pubblicazione <> id_pubb ;
-
 
 	end $
 
