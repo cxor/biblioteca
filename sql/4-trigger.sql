@@ -105,6 +105,8 @@ before INSERT on Pubblicazione FOR EACH ROW
 			end if ;
 	end $
 
+
+
 drop trigger if exists versione_stampa_trg;
 create trigger versione_stampa_trg 
 before INSERT on Versione_Stampa FOR EACH ROW 
@@ -123,7 +125,7 @@ before INSERT on Versione_Stampa FOR EACH ROW
 	
 		if NEW.data_stampa < maxdate
 			then
-				signal sqlstate '45000' set message_text='errore : la data della stampa non può essere inferiore a quella di pubblicazione ';
+				signal sqlstate '45000' set message_text='errore : la data dell ultima stampa inserita  ';
 		end if ;
 	end $
 
