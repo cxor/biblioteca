@@ -41,7 +41,7 @@ create function check_tipo_id_utente ( idUtente int ) returns integer
 
 
 
-# funzione che recupera l ID di una pubblicazione dato il titolo ( bisogna aggiustare il titolo _UNIQUE )
+# funzione che recupera l ID di una pubblicazione dato il titolo 
 
 
 drop function if exists get_id_pubblicazione;

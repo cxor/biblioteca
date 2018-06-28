@@ -278,12 +278,12 @@ create procedure cancella_pubblicazione (in IDPUBB int )
 
 
 drop procedure if exists  aggiorna_titolo ;
-create procedure aggiorna_titolo   (in IDPUBB int , in STRNG varchar(250))
+create procedure aggiorna_titolo   (in IDPUBB int , in STRNG varchar(250) , in email varchar(250) )
 	
 	begin
 	
 		update Pubblicazione set titolo = STRNG where id_pubblicazione = IDPUBB ; 
-	
+		 
 	end $
 
 
@@ -335,11 +335,11 @@ create procedure aggiungi_metadati
 
 
 drop procedure if exists  cancella_metadati ;
-create procedure cancella_metadati ( in ISBN BIGINT )
+create procedure cancella_metadati ( in _ISBN BIGINT )
 	
 	begin
 	
-		delete from Metadati where isbn = ISBN ;
+		delete from Metadati where isbn = _ISBN ;
 	
 	end $
 
@@ -349,11 +349,11 @@ create procedure cancella_metadati ( in ISBN BIGINT )
 
 
 drop procedure if exists  aggiorna_edizione_metadati ;
-create procedure aggiorna_edizione_metadati (in EDI int , in ISBN BIGINT )
+create procedure aggiorna_edizione_metadati (in EDI int , in _ISBN BIGINT )
 	
 	begin
 	
-		update Metadati set edizione = EDI where isbn = ISBN ; 
+		update Metadati set edizione = EDI where isbn = _ISBN ; 
 	
 	end $
 
@@ -362,11 +362,11 @@ create procedure aggiorna_edizione_metadati (in EDI int , in ISBN BIGINT )
 
 
 drop procedure if exists  aggiorna_editore_metadati ;
-create procedure aggiorna_editore_metadati (in EDI int , in ISBN BIGINT )
+create procedure aggiorna_editore_metadati (in EDI varchar(50) , in _ISBN BIGINT )
 	
 	begin
 	
-		update Metadati set editore = EDI where isbn = ISBN ; 
+		update Metadati set editore = EDI where isbn = _ISBN ; 
 	
 	end $
 
@@ -930,9 +930,6 @@ create procedure cancella_link (in IDPUBB int , in IDRIS int )
 		delete from Link where id_pubblicazione = IDPUBB and id_risorsa= IDRIS;
 
 	end $
-
-
-
 
 
 

@@ -32,16 +32,16 @@ call aggiungi_anagrafica(10,'tre','disalle'    ,'mxmxmx89i13j390p'  ,'1994-04-26
 #aggiunta Pubblicazioni
 
 DELETE FROM Pubblicazione;
-call aggiungi_pubblicazione ('titolo1','categ1');
-call aggiungi_pubblicazione ('titolo2','categ2');
-call aggiungi_pubblicazione ('titolo3','categ3');
-call aggiungi_pubblicazione ('titolo4','categ4');
-call aggiungi_pubblicazione ('titolo5','categ5');
-call aggiungi_pubblicazione ('titolo6','categ6');
-call aggiungi_pubblicazione ('titolo7','categ7');
-call aggiungi_pubblicazione ('titolo8','categ8');
-call aggiungi_pubblicazione ('titolo9','categ9');
-
+call aggiungi_pubblicazione ('titolo1','REPORT');
+call aggiungi_pubblicazione ('titolo2','LIBRO');
+call aggiungi_pubblicazione ('titolo3','TESI');
+call aggiungi_pubblicazione ('titolo4','ARTICOLO');
+call aggiungi_pubblicazione ('titolo5','ARTICOLO');
+call aggiungi_pubblicazione ('titolo6','TESI');
+call aggiungi_pubblicazione ('titolo7','LIBRO');
+call aggiungi_pubblicazione ('titolo8','REPORT');
+call aggiungi_pubblicazione ('titolo9','ARTICOLO');
+call aggiungi_pubblicazione ('titolo9','REPORT');
 
 
 #aggiunta metadati
@@ -49,12 +49,15 @@ call aggiungi_pubblicazione ('titolo9','categ9');
 DELETE FROM Metadati;
 #ins   dati value (IDPUBB, EDIZIONE ,EDITORE,DATAPUBB ,PAROLECHIAVE ,ISBN ,NUMPAGINE ,LINGUA ,SINOSSI);						
 call aggiungi_metadati(1, 2 ,'editore1','1800-01-01' ,'par1 par2 par3' ,1 ,987 ,'italiana' ,'asbstract pubblicazione1' );
-call aggiungi_metadati(2, 1 ,'editore2','1800-01-01' ,'par1 par2 par3' ,2 ,987 ,'italiana' ,'asbstract pubblicazione2' );
+call aggiungi_metadati(2, 1 ,'editore2','1800-01-01' ,'par1 par2 par3' ,2 ,987 ,'bulgara' ,'asbstract pubblicazione2' );
 call aggiungi_metadati(3, 1 ,'editore3','1800-01-01' ,'par1 par2 par3' ,3 ,987 ,'italiana' ,'asbstract pubblicazione3' );
-call aggiungi_metadati(4, 1 ,'editore4','1800-01-01' ,'par1 par2 par3' ,4 ,987 ,'italiana' ,'asbstract pubblicazione4' );
+call aggiungi_metadati(4, 1 ,'editore4','1800-01-01' ,'par1 par2 par3' ,4 ,987 ,'svizzera' ,'asbstract pubblicazione4' );
 call aggiungi_metadati(5, 1 ,'editore5','1800-01-01' ,'par1 par2 par3' ,5 ,987 ,'italiana' ,'asbstract pubblicazione5' );
-call aggiungi_metadati(6, 1 ,'editore6','1800-01-01' ,'par1 par2 par3' ,6 ,987 ,'italiana' ,'asbstract pubblicazione6' );
-
+call aggiungi_metadati(6, 1 ,'editore6','1800-01-01' ,'par1 par2 par3' ,6 ,987 ,'francese' ,'asbstract pubblicazione6' );
+call aggiungi_metadati(7 ,1 ,'editore3','1800-01-01' ,'par1 par2 par3' ,7 ,987 ,'inglese' ,'asbstract pubblicazione3' );
+call aggiungi_metadati(8, 1 ,'editore4','1800-01-01' ,'par1 par2 par3' ,8 ,987 ,'italiana' ,'asbstract pubblicazione4' );
+call aggiungi_metadati(9, 1 ,'editore5','1800-01-01' ,'par1 par2 par3' ,9 ,987 ,'giapponese' ,'asbstract pubblicazione5' );
+call aggiungi_metadati(10, 1 ,'editore6','1800-01-01' ,'par1 par2 par3' ,10 ,987 ,'italiana' ,'asbstract pubblicazione6' );
 
 #aggiunti autori
 CALL aggiungi_autore('aaa','zzz');
@@ -147,9 +150,6 @@ call aggiungi_recensione(3,7,'testo13');
 call aggiungi_recensione(4,8,'testo14');
 call aggiungi_recensione(4,1,'testo15');
 call aggiungi_recensione(5,2,'testo16');
-
-
-
 
 
 call aggiungi_gradimento(1 , 1 );

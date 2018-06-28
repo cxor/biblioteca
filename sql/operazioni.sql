@@ -14,6 +14,20 @@ delimiter $
 # aggiungi_utente e aggiungi_anagrafica presenti nel _file delle operazioni CRUD
 #
 
+drop procedure if exists login ;
+create procedure login ( in var_email varchar(50) , in var_password varchar(50) ,OUT is_correct boolean )
+	begin
+		
+    IF EXISTS(SELECT * FROM Utente WHERE email = var_email AND password = PASSWORD(var_password) ) then
+        set is_correct = true;
+    ELSE
+         set is_correct = false;
+    END IF;
+		
+	end $
+
+
+
 
 drop procedure if exists registrazione ; 
 create procedure registrazione 

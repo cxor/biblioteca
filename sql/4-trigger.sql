@@ -75,17 +75,57 @@ before insert on Anagrafica FOR EACH ROW
 
 
 
-#trigger pubblicazione che aggiorna la data dell ultima modifica
+#trigger pubblicazione che aggiorna la data dell ultima modifica 
 
 
-drop trigger if exists pubblicazione_trg;
-create trigger pubblicazione_trg
-after UPDATE on Pubblicazione FOR EACH ROW 
+drop trigger if exists modifica_pubblicazione_trg;
+create trigger modifica_pubblicazione_trg 
+before UPDATE on Pubblicazione FOR EACH ROW 
 	BEGIN 
-		update Pubblicazione set data_ultima_modifica = CURRENT_TIMESTAMP where id_pubblicazione = NEW.id_pubblicazione ;
+		 set NEW.data_ultima_modifica = CURRENT_TIMESTAMP ;
+	end $
+	
+	
+
+-- le categorie che vengono supportate dalla base di dati sono limitate a  TESI , REPORT , ARTICOLO , LIBRO
+drop trigger if exists insert_pubblicazione_trg;
+create trigger insert_pubblicazione_trg 
+before INSERT on Pubblicazione FOR EACH ROW 
+	BEGIN 
+	if ( select   ( strcmp (NEW.categoria ,'TESI') = 0 
+		     	 OR strcmp ( NEW.categoria,'REPORT') = 0
+				 OR strcmp ( NEW.categoria,'ARTICOLO') = 0
+		 		 OR strcmp ( NEW.categoria,'LIBRO') = 0 
+		 		
+       			  )
+		 =  0 )
+		 	then 
+				signal sqlstate '45000' set message_text='categoria non consentita';
+	
+			end if ;
 	end $
 
-
+drop trigger if exists versione_stampa_trg;
+create trigger versione_stampa_trg 
+before INSERT on Versione_Stampa FOR EACH ROW 
+	begin
+		declare var_date date ;	
+		
+		declare maxdate date ;	
+		
+		select data_pubblicazione into var_date from Metadati where isbn = NEW.isbn ;
+		select max(data_stampa) into maxdate from Versione_Stampa where isbn = NEW.isbn ;
+		if NEW.data_stampa < var_date
+			then
+				signal sqlstate '45000' set message_text='errore : la data della stampa non può essere inferiore a quella di pubblicazione ';
+		end if ;
+		 
+	
+		if NEW.data_stampa < maxdate
+			then
+				signal sqlstate '45000' set message_text='errore : la data della stampa non può essere inferiore a quella di pubblicazione ';
+		end if ;
+	end $
 
 
 delimiter ;

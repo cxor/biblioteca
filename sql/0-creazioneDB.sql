@@ -2,7 +2,11 @@ drop DATABASE if exists BIBLIOTECA;
 
 create DATABASE BIBLIOTECA;
 
+GRANT ALL ON BIBLIOTECA.*  TO  'utentebiblioteca'@'localhost'  IDENTIFIED BY  'password' ; 
+
 USE BIBLIOTECA
+
+
 
 #
 #	CREAZIONE TABELLE PER LE ENTITà
@@ -12,7 +16,7 @@ create table Utente (
 	
 	id_utente    			int AUTO_INCREMENT PRIMARY KEY,
 	email 		 			varchar(50) 	 not NULL,
-	password	 			varchar(250)	 not NULL,
+	password	 			varchar(50)	 	 not NULL,
 	tipo		 			varchar(50) 	 not NULL default 'PASSIVO',
 	num_inserimenti 		int 			 default 0,
 	 	
@@ -21,13 +25,13 @@ create table Utente (
 
 create table Anagrafica (
 
-	id_utente  				int PRIMARY KEY,
-	nome  		 			varchar(250) 	not NULL,
-	cognome		 			varchar(250) 	not NULL,	
-	cf		 				varchar(50)	 	not NULL,
+	id_utente  				int			 PRIMARY KEY,
+	nome  		 			varchar(50) 	not NULL,
+	cognome		 			varchar(50) 	not NULL,	
+	cf		 				varchar(50)	 			,
 	data_nascita  			DATE	     	not NULL,
-	luogo_nascita 			varchar(250) 	not NULL,
-	nazionalita				varchar(250) 	not NULL,
+	luogo_nascita 			varchar(50) 	not NULL,
+	nazionalita				varchar(50) 	not NULL,
 	
 	CONSTRAINT ANAGRAFICA_UTENTE FOREIGN KEY (id_utente) REFERENCES Utente(id_utente) ON DELETE CASCADE,
 	CONSTRAINT UNICA_ANAGRAFICA unique(cf)
@@ -36,10 +40,10 @@ create table Anagrafica (
 create table Pubblicazione (
 
 	id_pubblicazione 		int 			AUTO_INCREMENT PRIMARY KEY,
-	titolo		 			varchar(250) 	not NULL,
+	titolo		 			varchar(50) 	not NULL,
 	data_inserimento 		TIMESTAMP 		default CURRENT_TIMESTAMP, 
 	data_ultima_modifica 	TIMESTAMP 		default CURRENT_TIMESTAMP,
-	categoria 				varchar(250) 	not NULL,
+	categoria 				varchar(50) 	not NULL,
 	numlike		 			int 			default 0
 	
 );
@@ -50,7 +54,7 @@ create table Metadati (
 	edizione				int default 1 not NULL,
 	editore					varchar(50),
 	data_pubblicazione 		DATE,
-	parole_chiave			varchar(250),
+	parole_chiave			varchar(50),
 	isbn					BIGINT PRIMARY KEY,
 	num_pagine				int,
 	lingua					varchar(50),
@@ -63,20 +67,20 @@ create table Metadati (
 create table Autore (
 
 	id_autore 				int AUTO_INCREMENT PRIMARY KEY,
-	nome 					varchar(250) not NULL,
-	cognome 				varchar(250) not NULL
+	nome 					varchar(50) not NULL,
+	cognome 				varchar(50) not NULL,
 	
-	CONSTRAINT UNICO_AUTORE UNIQUE (nome ,cognome ),
+	CONSTRAINT UNICO_AUTORE UNIQUE (nome ,cognome )
 );
 
 
 create table Capitolo (
 
 	id_capitolo				int AUTO_INCREMENT PRIMARY KEY,
-	id_pubblicazione 		int,
-	titolo					varchar(250) not NULL,
+	id_pubblicazione 		int not NULL,
+	titolo					varchar(50) not NULL,
 	descrizione				varchar(500),
-	num_capitolo			int,
+	num_capitolo			int not NULL,
 	
 	CONSTRAINT CAPITOLO_PUBBLICAZIONE FOREIGN KEY(id_pubblicazione) REFERENCES Pubblicazione(id_pubblicazione),
 	CONSTRAINT UNICO_CAPITOLO unique (id_pubblicazione,num_capitolo)
@@ -96,15 +100,15 @@ create table Versione_Stampa (
 create table Mediatype (
 
 	id_mediatype	 		int AUTO_INCREMENT PRIMARY KEY,
-	tipo					varchar(250) not NULL,
-	formato					varchar(250) not NULL
+	tipo					varchar(50) not NULL,
+	formato					varchar(50) not NULL
 );
 
 create table Risorse (
 
 	id_risorsa		 		int AUTO_INCREMENT PRIMARY KEY,
 	id_mediatype			int not NULL,
-	uri						varchar(250) not NULL,
+	uri						varchar(50) not NULL,
 	descrizione				varchar(500),
 
 	CONSTRAINT RISORSE_MEDIATYPE FOREIGN KEY(id_mediatype) REFERENCES Mediatype(id_mediatype)

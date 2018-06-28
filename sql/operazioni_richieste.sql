@@ -270,6 +270,8 @@ delimiter $
 			DECLARE var_descrizione varchar(100);
 			DECLARE CONTINUE HANDLER FOR SQLEXCEPTION set all_ok = true;
 		
+			
+		
 			START TRANSACTION;
 			set var_descrizione = concat(' l utente ',emailutente,' ha inserito una recensione');
 			call aggiungi_recensione(get_id_utente(emailutente) , id_pubb, TESTO );	
@@ -467,8 +469,11 @@ delimiter $
 
 # OPERAZIONE 15. Estrazione log_ delle modifiche effettuare su una pubblicazione.
 
-
-
+		drop procedure if exists log_modifiche;
+		create procedure modifica_log(in id_pubb int)
+		begin
+				select * from Storico where id_pubblicazione = id_pubb and operazione = 'MODIFICA PUBBLICAZIONE';
+		end $
 
 
 # OPERAZIONE 16. Estrazione elenco delle pubblicazioni per le quali è disponibile un download.
@@ -478,15 +483,7 @@ delimiter $
 		
 		begin
 		
-			select * from Pubblicazione 
-					
-					join Link on Pubblicazione.id_pubblicazione = Link.id_pubblicazione
-					
-					join Risorse on Link.id_risorsa = Risorse.id_risorsa
-					
-					join Mediatype on Risorse.id_mediatype = Mediatype.id_mediatype
-					
-						where Mediatype.tipo = 'DOWNLOAD' ; 		
+			select * from view_pubblicazione_download ;	
 		
 		end $
 
@@ -515,93 +512,11 @@ delimiter $
 #
 #			- le pubblicazioni scritte dagli stessi autori e dai sottoinsiemi
 #			
-#			- le pubblicazioni scritte dagli stessi autori più eventuali altri autori
-#	
 #			- le pubblicazione scritte da esattamente gli stessi autori.
 #
 #
 
 
-
-
-
-
-
-
-
-	drop procedure if exists elenco_pubblicazioni_stessi_autori_uno ;
-	create procedure elenco_pubblicazioni_stessi_autori_uno( in id_pubb int )
-
-	begin
-
-		 select distinct p1.titolo , m1.*  from Pubblicazione as p1   
-		 	
-		 	join Metadati as m1 on p1.id_pubblicazione = m1.id_pubblicazione  
-		 	
-		 	join Attribuzione as a1 on m1.isbn = a1.isbn    
-		 	
-		 	join Autore  as au1 on a1.id_autore = au1.id_autore     
-		 	
-		 	join (
-		 	
-		 		    select p2.titolo , au2.cognome from Pubblicazione as p2  
-		 	
-		 		    	join Metadati as m2 on p2.id_pubblicazione = m2.id_pubblicazione   
-		 	
-		 		    	join Attribuzione as a2 on m2.isbn = a2.isbn   
-		 	
-		 		    	join Autore as au2 on a2.id_autore = au2.id_autore  
-		 	
-		 		    		where p2.id_pubblicazione = id_pubb   
-		 		  
-		 		  ) as jjj;
-
-	end $
-
-
-	drop procedure if exists elenco_pubblicazioni_stessi_autori_due ;
-	create procedure elenco_pubblicazioni_stessi_autori_due( in id_pubb int )
-
-	begin
-			
-			select m1.* , au1.* from Pubblicazione as p1 
-				
-				join Metadati as m1 on p1.id_pubblicazione = m1.id_pubblicazione  
-				
-				join Attribuzione as a1 on m1.isbn = a1.isbn  
-				
-				join Autore  as au1 on a1.id_autore = au1.id_autore   
-		
-				join (
-				
-					#ritorno la lista di autori della pubb
-		
-					select p2.titolo , au2.cognome from Pubblicazione as p2  
-			
-						join Metadati as m2 on p2.id_pubblicazione = m2.id_pubblicazione 
-			
-						join Attribuzione as a2 on m2.isbn = a2.isbn 
-			
-						join Autore as au2 on a2.id_autore = au2.id_autore
-				
-						where p2.id_pubblicazione = id_pubb
-			
-				 ) as jjj 
-		
-					where au1.cognome = jjj.cognome and p1.id_pubblicazione <> id_pubb group by p1.titolo having count(*) = 
-					(
-						# ritorna il numero di autori della pubblicazione
-						
-						select count(*)  from Pubblicazione as p2 join Metadati as m2 on p2.id_pubblicazione = m2.id_pubblicazione 
-		
-							join Attribuzione as a2 on m2.isbn = a2.isbn  
-		
-							join Autore as au2 on a2.id_autore = au2.id_autore
-		
-							where p2.id_pubblicazione = id_pubb group by p2.id_pubblicazione 
-					) ;
-
-	end $
 
 
 
