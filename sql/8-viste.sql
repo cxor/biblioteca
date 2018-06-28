@@ -32,26 +32,3 @@ create view view_pubblicazione_download as
 						where Mediatype.tipo = 'DOWNLOAD' ; 	
 						
 						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-
-
-drop view if exists view_pubblicazione_download;
-create view view_pubblicazione_download as
-
-		
-						
-						
-						
-						
-						
