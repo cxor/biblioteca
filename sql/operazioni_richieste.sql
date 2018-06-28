@@ -145,7 +145,7 @@ delimiter $
 
 # OPERAZIONE 6. Estrazione catalogo, cioè elenco di tutte le pubblicazioni con titolo, autori, editore e anno di pubblicazione, ordinato per titolo.
 #
-#			Dato che per l operazione 18 abbiamo creato una vista 
+#			
 #
 #
 
@@ -208,52 +208,37 @@ delimiter $
 #
 
 		drop procedure if exists ricerca ;
-		create procedure ricerca ( in var_search varchar(250) , var_tipo varchar(20))
+		create procedure ricerca ( in var_search varchar(50), in var_isbn  BIGINT , in var_autori varchar(50) , in var_titolo varchar(50) )
 
 		BEGIN
 		
-				DECLARE err CONDITION FOR SQLSTATE '45000' ;
 		
-				if strcmp( var_tipo , 'TITOLO') = 0
+		select * from view_pubblicazione_autori 
+		
+			where Autori LIKE CONCAT('%', var_autori , '%')  OR Autori LIKE CONCAT('%', var_autori , '%') ;
+		
+			OR titolo LIKE CONCAT('%', var_titolo , '%') ;
+		 
+		 	OR parole_chiave LIKE CONCAT('%', var_search , '%') 
+		 	
+		 	OR isbn LIKE CONCAT('%', var_isbn , '%') ;
+		
 				
-				then
-				
-						select titolo From Pubblicazione where titolo LIKE CONCAT('%', var_search , '%') ;
-				
-				elseif  strcmp( var_tipo , 'AUTORE') = 0 then
-				
-						#effettua la ricerca per autore
-				
-						select Pubblicazione.titolo , Metadati.isbn ,Autore.nome , Autore.cognome from Pubblicazione 
-							
-								join Metadati on Pubblicazione.id_pubblicazione = Metadati.id_pubblicazione
-								
-								join Attribuzione on Metadati.isbn = Attribuzione.isbn
-								
-								join Autore on Attribuzione.id_autore = Autore.id_autore
-								
-								where Autore.nome LIKE CONCAT('%', var_search , '%')  OR Autore.cognome LIKE CONCAT('%', var_search , '%') ;
-														
-				elseif 	strcmp( var_tipo , 'PAROLECHIAVE') = 0 then
-				
-						#effettua la ricerca per parole chiave
-				
-						select Pubblicazione.titolo  from Pubblicazione 
-						
-								join Metadati on Pubblicazione.id_pubblicazione = Metadati.id_pubblicazione 
-								
-								where Metadati.parole_chiave LIKE CONCAT('%', var_search , '%') ;
-
-				else
-						#errore_ricerca nel caso il parametro non si _in [ TITOLO , AUTORE , PAROLECHIAVE ]
-
-						SIGNAL err SET MESSAGE_TEXT = 'errore ricerca , parametro di filtraggio non riconosciuto ';
-
-				end if ;	
 		end $
 
 
 
+
+
+select * from view_pubblicazione_autori 
+		
+			where Autore.nome LIKE CONCAT('%', 123 , '%')  OR Autore.cognome LIKE CONCAT('%', 123 , '%') 
+		
+			OR titolo LIKE CONCAT('%', 123 , '%') 
+		 
+		 	OR Metadati.parole_chiave LIKE CONCAT('%', 123 , '%') 
+		 	
+		 	OR Metadati.isbn LIKE CONCAT('%', 123 , '%') ;
 
 
 # OPERAZIONE 9. Inserimento di una recensione relativa a una pubblicazione.
@@ -508,13 +493,6 @@ delimiter $
 
 # OPERAZIONE 18. Data una pubblicazione, restituire tutte le pubblicazioni aventi gli stessi autori
 #
-#	Questa query è ambigua , avente gli stessi autori potrebbe significare :
-#
-#			- le pubblicazioni scritte dagli stessi autori e dai sottoinsiemi
-#			
-#			- le pubblicazione scritte da esattamente gli stessi autori.
-#
-#
 
 
 
@@ -526,7 +504,7 @@ delimiter $
 	begin
 
 		select * from view_pubblicazione_autori 
-			where Autori = ( select Autori from view_pubblicazione_autori where id_pubblicazione =id_pubb );
+			where Autori = ( select Autori from view_pubblicazione_autori where id_pubblicazione =id_pubb ) and id_pubblicazione <> id_pubb ;
 
 
 	end $

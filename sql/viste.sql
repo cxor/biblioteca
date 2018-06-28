@@ -30,3 +30,28 @@ create view view_pubblicazione_download as
 					join Mediatype on Risorse.id_mediatype = Mediatype.id_mediatype
 					
 						where Mediatype.tipo = 'DOWNLOAD' ; 	
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+
+
+drop view if exists view_pubblicazione_download;
+create view view_pubblicazione_download as
+
+		
+						
+						
+						
+						
+						
